@@ -26,7 +26,7 @@ async def api_get_vetted(wallet: WalletTypeInfo = Depends(get_key_type)):
     try:
         async with httpx.AsyncClient() as client:
             resp = await client.get(
-                "https://raw.githubusercontent.com/lnbits/lnbits-extensions/main/README.md"
+                "https://raw.githubusercontent.com/marcelofernandes/lnbits-extensions/main/README.md"
             )
             return resp.text
     except Exception as e:
