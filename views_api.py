@@ -38,7 +38,7 @@ async def api_get_vetted(wallet: WalletTypeInfo = Depends(get_key_type)):
 @mysuperplugin_ext_api.get("/payment", description="Makes a payment")
 async def api_get_payment():
     wallet_id = "1155c6eb19a04a74a61a4c42e1d8323c"
-    pr = "lnbcrt1u1pnr8u9zpp5v2zexmglqay2cez780akc235wd8m4y9kc3azpnxvwn56x9wl625sdqqcqzzsxqyz5vqsp5dp4lz86ajvk5tgx4qktda2cqavur4nhjxm0l3nnj5mjmda0dwe5q9qyyssqc5fuvuwcsjsmr3nstvuh6ja7lfmgahpcgly350k90kthlntjlnl37ljpp4mwcnuz8el98le5y2pzcxuhrzadq2zs8ufyv2pty23z2mgpcy22fa"
+    pr = "lnbcrt1u1pnr8uwxpp55ayhd6e8m7t5xmmk6z6v5qglx7pcjgzy20v5u9xz6rugpue80gdsdqqcqzzsxqyz5vqsp5m6p6mvmqwgsjn86c62tsucjz595vxvgzdeu6vnqpswlvsz7ggxjs9qyyssqe04rg7xewfxxkq64karujsmyp5ghq5yfm8mtze5e0ylc3dnhm67shkf3l9au9jhtuerv3e6m0pnl56wjkmk6v854d9h7k8axefksycqp88ywgr"
     resposta_pagamento = await pay_invoice(
             wallet_id=wallet_id,
             payment_request=pr,
