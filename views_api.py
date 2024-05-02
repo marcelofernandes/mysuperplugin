@@ -40,17 +40,9 @@ async def api_get_payment():
     server_url = "http://localhost:5000"
     api_key = "120c458e98fa436da99a182fb4adf10a"
     wallet = Wallet(server_url, api_key)
-
-    # ID do invoice que você deseja pagar
     invoice_id = "lnbcrt1u1pnr8e38pp55239fcmpfz4njxt740xjf7sp8neavnlmkzsyfrzanjme377776psdqqcqzzsxqyz5vqsp552j8kuqz60v5g0mlg0r9c74xmvhc4cxryplrja9qr8lpzgdgpevq9qyyssqak4exelqw3tcwcq7elfkuf3tw58hlfaxxfpr2g3wgllu5rxuqgqq8zm5rgucasyamrdgsm3sfcuf6ftpukv9y0qwgy86jwg95xkd96cqhu5kps"
-
-    # Valor do pagamento em satoshis
-    valor_pagamento = 100  # Por exemplo, 10.000 satoshis
-
-    # Enviar o pagamento do invoice
-    resposta_pagamento = await wallet.pay_invoice(invoice_id, valor_pagamento)
-
-    # Verificar se o pagamento foi bem-sucedido
+    valor_pagamento = 100
+    resposta_pagamento = wallet.pay_invoice(invoice_id, valor_pagamento)
     if resposta_pagamento.get("payment_error"):
         return resposta_pagamento
     else:
