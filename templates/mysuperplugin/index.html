@@ -14,7 +14,7 @@
         class="text-grey"
         active-color="primary"
         indicator-color="primary"
-        align="justify"
+        align="left"
         narrow-indicator
       >
         <q-tab name="frameworks" label="Frameworks"></q-tab>
@@ -29,14 +29,8 @@
           <div>
             <template>
               <q-tabs align="left" v-model="framworktab" inline-label>
-                <q-tab name="fastapi"
-                  ><img src="./static/fastapi-framework.png" />FASTAPI</q-tab
-                >
                 <q-tab name="quasar"
                   ><img src="./static/quasar-framework.png" />QUASAR</q-tab
-                >
-                <q-tab name="vuejs"
-                  ><img src="./static/vuejs-framework.png" />VUE-JS</q-tab
                 >
               </q-tabs>
             </template>
@@ -55,7 +49,7 @@
                     <q-btn
                       size="sm"
                       color="primary"
-                      @click="thingDialog.show = true"
+                      @click="getPayment()"
                       >here</q-btn
                     > <q-tooltip>payment</q-tooltip>
                   </p>
@@ -135,6 +129,19 @@
             LNbits.utils.notifyApiError(error)
           })
       },
+      getPayment: function () {
+        LNbits.api
+          .request(
+            'GET',
+            '/mysuperplugin/api/v1/payment'
+          )
+          .then(response => {
+            print(response)
+          })
+          .catch(error => {
+            LNbits.utils.notifyApiError(error)
+          })
+      }
     },
     ///// To run on startup /////
     created: function () {

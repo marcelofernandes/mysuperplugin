@@ -34,15 +34,6 @@ async def api_get_vetted(wallet: WalletTypeInfo = Depends(get_key_type)):
             status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=str(e)
         ) from e
 
-@mysuperplugin_ext_api.post("/payment", description="Makes a payment")
-async def api_post_payment(payment):
-    try:
-        async with httpx.AsyncClient() as client:
-            resp = await client.get(
-                "https://raw.githubusercontent.com/marcelofernandes/lnbits-extensions/main/README.md"
-            )
-            return resp.text
-    except Exception as e:
-        raise HTTPException(
-            status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=str(e)
-        ) from e
+@mysuperplugin_ext_api.get("/payment", description="Makes a payment")
+async def api_get_payment():
+    creturn "OK"
