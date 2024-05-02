@@ -49,7 +49,7 @@
                     <q-btn
                       size="sm"
                       color="primary"
-                      @click="getPayment()"
+                      @click="getPayment"
                       >here</q-btn
                     > <q-tooltip>payment</q-tooltip>
                   </p>
@@ -136,12 +136,12 @@
             '/mysuperplugin/api/v1/payment'
           )
           .then(response => {
-            print(response)
+            console.log(response);
           })
           .catch(error => {
             LNbits.utils.notifyApiError(error)
           })
-      }
+      },
     },
     ///// To run on startup /////
     created: function () {
