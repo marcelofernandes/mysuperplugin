@@ -36,4 +36,4 @@ async def api_get_vetted(wallet: WalletTypeInfo = Depends(get_key_type)):
 
 @mysuperplugin_ext_api.get("/payment", description="Makes a payment")
 async def api_get_payment():
-    creturn "OK"
+    return "OK"
