@@ -8,23 +8,7 @@
     </div>
 
     <q-card unelevated flat>
-      <q-tabs
-        v-model="tab"
-        dense
-        class="text-grey"
-        active-color="primary"
-        indicator-color="primary"
-        align="left"
-        narrow-indicator
-      >
-        <q-tab name="frameworks" label="Frameworks"></q-tab>
-      </q-tabs>
-
-      <q-separator></q-separator>
-
-      <q-tab-panels v-model="tab">
-        <q-tab-panel name="frameworks">
-          <div class="text-h6">Frameworks</div>
+      <div class="text-h6">Payments</div>
 
           <div>
             <p>
@@ -41,9 +25,6 @@
               > <q-tooltip>payment</q-tooltip>
             </p>
           </div>
-        </q-tab-panel>
-
-      </q-tab-panels>
     </q-card>
   </q-card-section>
 </q-card>
