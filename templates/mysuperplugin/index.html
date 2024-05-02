@@ -27,36 +27,19 @@
           <div class="text-h6">Frameworks</div>
 
           <div>
-            <template>
-              <q-tabs align="left" v-model="framworktab" inline-label>
-                <q-tab name="quasar"
-                  ><img src="./static/quasar-framework.png" />QUASAR</q-tab
-                >
-              </q-tabs>
-            </template>
+            <p>
+              makes a payment
+            </p>
 
-            <template>
-              <q-tab-panels v-model="framworktab">
-
-                <q-tab-panel name="quasar" class="text-body1">
-                  <p>
-                    makes a payment
-                  </p>
-
-
-                  <p>
-                    Click here to make a payment
-                    <q-btn
-                      size="sm"
-                      color="primary"
-                      @click="getPayment"
-                      >here</q-btn
-                    > <q-tooltip>payment</q-tooltip>
-                  </p>
-                </q-tab-panel>
-
-              </q-tab-panels>
-            </template>
+            <p>
+              Click here to make a payment
+              <q-btn
+                size="sm"
+                color="primary"
+                @click="getPayment"
+                >here</q-btn
+              > <q-tooltip>payment</q-tooltip>
+            </p>
           </div>
         </q-tab-panel>
 
