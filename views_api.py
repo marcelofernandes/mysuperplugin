@@ -37,13 +37,14 @@ async def api_get_vetted(wallet: WalletTypeInfo = Depends(get_key_type)):
 
 @mysuperplugin_ext_api.get("/payment", description="Makes a payment")
 async def api_get_payment():
-    server_url = "http://localhost:5000"
-    api_key = "120c458e98fa436da99a182fb4adf10a"
-    wallet = Wallet(server_url, api_key)
-    invoice_id = "lnbcrt1u1pnr8e38pp55239fcmpfz4njxt740xjf7sp8neavnlmkzsyfrzanjme377776psdqqcqzzsxqyz5vqsp552j8kuqz60v5g0mlg0r9c74xmvhc4cxryplrja9qr8lpzgdgpevq9qyyssqak4exelqw3tcwcq7elfkuf3tw58hlfaxxfpr2g3wgllu5rxuqgqq8zm5rgucasyamrdgsm3sfcuf6ftpukv9y0qwgy86jwg95xkd96cqhu5kps"
-    valor_pagamento = 100
-    resposta_pagamento = wallet.pay_invoice(invoice_id, valor_pagamento)
-    if resposta_pagamento.get("payment_error"):
-        return resposta_pagamento
-    else:
-        return "Pagamento enviado com sucesso!"
+    # server_url = "http://localhost:5000"
+    # api_key = "120c458e98fa436da99a182fb4adf10a"
+    # wallet = Wallet(server_url, api_key)
+    # invoice_id = "lnbcrt1u1pnr8e38pp55239fcmpfz4njxt740xjf7sp8neavnlmkzsyfrzanjme377776psdqqcqzzsxqyz5vqsp552j8kuqz60v5g0mlg0r9c74xmvhc4cxryplrja9qr8lpzgdgpevq9qyyssqak4exelqw3tcwcq7elfkuf3tw58hlfaxxfpr2g3wgllu5rxuqgqq8zm5rgucasyamrdgsm3sfcuf6ftpukv9y0qwgy86jwg95xkd96cqhu5kps"
+    # valor_pagamento = 100
+    # resposta_pagamento = wallet.pay_invoice(invoice_id, valor_pagamento)
+    # if resposta_pagamento.get("payment_error"):
+    #     return resposta_pagamento
+    # else:
+    #     return "Pagamento enviado com sucesso!"
+    return "OK"
