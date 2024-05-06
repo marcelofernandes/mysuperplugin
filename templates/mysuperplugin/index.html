@@ -94,7 +94,7 @@
           })
       },
       getPayment: function () {
-        payment_hash = undefined;
+        description_hash = undefined;
         LNbits.api
           .request(
             'GET',
@@ -106,7 +106,7 @@
           })
           .then(response => {
             let data = response.data
-            payment_hash = data.payment_hash;
+            description_hash = data.description_hash;
             console.log(response)
             let dismissPaymentMsg = this.$q.notify({
             timeout: 0,
@@ -114,31 +114,22 @@
           })
 
           LNbits.api
-            .payLnurl(
-              '925aaefbf1c144efb29f868ce64d92c3',
-              'https://7fc8-177-84-220-121.ngrok-free.app/lnurlp/api/v1/lnurl/cb/oWby2P',
-              'e6adc390f4ca5af8ae9869e55122025e4d31db2d7f63cddd97d17013dac2d5ef',
-              100000,
-              'Payment to marcelo',
-              '',
-              'sat'
+            .request(
+              'POST',
+              '/api/v1/payments/lnurl',
+              '767bcb181bf84e75b261d58c629b92c6',
+              {
+                amount: 100000,
+                callback: 'https://7fc8-177-84-220-121.ngrok-free.app/lnurlp/api/v1/lnurl/cb/oWby2P',
+                comment: "",
+                description: "Payment to marcelo",
+                description_hash: description_hash,
+                unit: 'sat'
+
+              }
             )
             .then(response => {
-
-              clearInterval(this.parse.paymentChecker)
-              setTimeout(() => {
-                clearInterval(this.parse.paymentChecker)
-              }, 40000)
-              this.parse.paymentChecker = setInterval(() => {
-                LNbits.api
-                  .getPayment('925aaefbf1c144efb29f868ce64d92c3', payment_hash)
-                  .then(res => {
-                    if (res.data.paid) {
-                      console.log(res.data)
-                      clearInterval(this.parse.paymentChecker)
-                    }
-                  })
-              }, 2000)
+              console.log(response)
             })
           .catch(err => {
             console.log(err)
