@@ -63,36 +63,6 @@
     },
     ///// Where functions live /////
     methods: {
-      mysuperpluginFunction: function (data) {
-        var theData = data
-        LNbits.api
-          .request(
-            'GET', // Type of request
-            '/mysuperplugin/api/v1/test/' + theData, // URL of the endpoint
-            this.g.user.wallets[0].inkey // Often endpoints require a key
-          )
-          .then(response => {
-            this.mysuperpluginData = response.data.map(someMapObject) // Often whats returned is mapped onto some model
-          })
-          .catch(error => {
-            LNbits.utils.notifyApiError(error) // Error will be passed to the frontend
-          })
-      },
-      getVettedReadme: function () {
-        // This is a function that gets the vetted readme from the LNbits repo and converts it from makrdown to html.
-        LNbits.api
-          .request(
-            'GET',
-            '/mysuperplugin/api/v1/vetted',
-            this.g.user.wallets[0].inkey
-          )
-          .then(response => {
-            this.vettedData = LNbits.utils.convertMarkdown(response.data)
-          })
-          .catch(error => {
-            LNbits.utils.notifyApiError(error)
-          })
-      },
       getPayment: function () {
         let dismissPaymentMsg = undefined;
         let description_hash = undefined;
@@ -144,9 +114,7 @@
     },
     ///// To run on startup /////
     created: function () {
-      self = this // Often used to run a real object, rather than the event (all a bit confusing really)
-      self.mysuperpluginFunction('lorum')
-      self.getVettedReadme()
+      self = this
     }
   })
 </script>
