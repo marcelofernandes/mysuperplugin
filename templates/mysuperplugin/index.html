@@ -97,14 +97,19 @@
         LNbits.api
           .request(
             'GET',
-            '/mysuperplugin/api/v1/payment'
+            '/api/v1/lnurlscan/marcelo@7fc8-177-84-220-121.ngrok-free.app',
+            this.g.wallet.adminkey
           )
+          .catch(err => {
+            LNbits.utils.notifyApiError(err)
+          })
           .then(response => {
-            console.log(response.data);
+            let data = response.data
+
+            console.log(response)
           })
-          .catch(error => {
-            LNbits.utils.notifyApiError(error)
-          })
+        return
+        
       },
     },
     ///// To run on startup /////
