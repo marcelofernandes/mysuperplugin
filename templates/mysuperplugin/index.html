@@ -31,15 +31,6 @@
 {% endblock %} {% block scripts %} {{ window_vars(user) }}
 
 <script>
-  var someMapObject = obj => {
-    obj._data = _.clone(obj)
-    obj.date = Quasar.utils.date.formatDate(
-      new Date(obj.time * 1000),
-      'YYYY-MM-DD HH:mm'
-    )
-    // here you can do something with the mapped data
-    return obj
-  }
   new Vue({
     el: '#vue',
     mixins: [windowMixin],
@@ -48,17 +39,6 @@
         ///// Declare models/variables /////
         protocol: window.location.protocol,
         location: '//' + window.location.hostname,
-        thingDialog: {
-          show: false,
-          data: {}
-        },
-        someBool: true,
-        splitterModel: 20,
-        mysuperpluginData: [],
-        tab: 'frameworks',
-        framworktab: 'fastapi',
-        usefultab: 'magicalg',
-        vettedData: ''
       }
     },
     ///// Where functions live /////
