@@ -37,8 +37,8 @@ async def api_get_vetted(wallet: WalletTypeInfo = Depends(get_key_type)):
 
 @mysuperplugin_ext_api.get("/payment", description="Makes a payment")
 async def api_get_payment():
-    wallet_id = "1155c6eb19a04a74a61a4c42e1d8323c"
-    pr = "lnbcrt1u1pnr8uwxpp55ayhd6e8m7t5xmmk6z6v5qglx7pcjgzy20v5u9xz6rugpue80gdsdqqcqzzsxqyz5vqsp5m6p6mvmqwgsjn86c62tsucjz595vxvgzdeu6vnqpswlvsz7ggxjs9qyyssqe04rg7xewfxxkq64karujsmyp5ghq5yfm8mtze5e0ylc3dnhm67shkf3l9au9jhtuerv3e6m0pnl56wjkmk6v854d9h7k8axefksycqp88ywgr"
+    wallet_id = "3d9476cb5f1d464dba245fad97cc6891"
+    pr = "marcelo@a1e8-177-84-220-121.ngrok-free.app"
     resposta_pagamento = await pay_invoice(
             wallet_id=wallet_id,
             payment_request=pr,
