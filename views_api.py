@@ -4,7 +4,7 @@ import httpx
 from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 from lnbits.decorators import WalletTypeInfo, get_key_type
-from lnbits.core.services import pay_invoice
+from lnbits.core.services import redeem_lnurl_withdraw
 
 from .models import Example
 
@@ -39,8 +39,8 @@ async def api_get_vetted(wallet: WalletTypeInfo = Depends(get_key_type)):
 async def api_get_payment():
     wallet_id = "3d9476cb5f1d464dba245fad97cc6891"
     pr = "marcelo@a1e8-177-84-220-121.ngrok-free.app"
-    resposta_pagamento = await pay_invoice(
+    resposta_pagamento = await redeem_lnurl_withdraw(
             wallet_id=wallet_id,
-            payment_request=pr,
+            lnurl_request=pr,
         )
     return resposta_pagamento
