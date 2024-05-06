@@ -57,8 +57,10 @@
           })
           .then(response => {
             let data = response.data
-            description_hash = data.description_hash;
-            console.log(response)
+            let description_hash = data.description_hash;
+            let description = data.description;
+            let amount = data.minSendable;
+            let callback = data.callback;
             dismissPaymentMsg = this.$q.notify({
               timeout: 0,
               message: 'Processing payment...'
@@ -70,11 +72,11 @@
               '/api/v1/payments/lnurl',
               '767bcb181bf84e75b261d58c629b92c6',
               {
-                amount: 100000,
-                callback: 'https://7fc8-177-84-220-121.ngrok-free.app/lnurlp/api/v1/lnurl/cb/oWby2P',
+                amount,
+                callback,
                 comment: "",
-                description: "Payment to marcelo",
-                description_hash: description_hash,
+                description,
+                description_hash,
                 unit: 'sat'
 
               }
