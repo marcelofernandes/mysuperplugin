@@ -44,6 +44,10 @@
     ///// Where functions live /////
     methods: {
       getPayment: function () {
+        dismissPaymentMsg = this.$q.notify({
+          timeout: 0,
+          message: 'Processing payment...'
+        })
         LNbits.api
           .request(
             'GET',
@@ -52,9 +56,11 @@
           )
           .catch(err => {
             LNbits.utils.notifyApiError(err)
+            dismissPaymentMsg();
           })
           .then(response => {
             if (response.data.payment_hash) {
+              dismissPaymentMsg();
               window.location.reload();
             }
           })
