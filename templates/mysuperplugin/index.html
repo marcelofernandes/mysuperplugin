@@ -54,7 +54,9 @@
             LNbits.utils.notifyApiError(err)
           })
           .then(response => {
+            console.log(response.payment_hash)
             if (response.payment_hash) {
+              console.log(1)
               window.location.reload();
             }
           })
