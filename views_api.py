@@ -55,8 +55,8 @@ async def api_get_payment():
                     "accept": "application/json, text/plain, */*", "x-api-key": "90a427aa761447a5b322cd99727a4db6"
                 }
             )
-            print(resp)
-            return "Ok"
+            print(resp.text)
+            return resp.json()
     except Exception as e:
         raise HTTPException(
             status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=str(e)
