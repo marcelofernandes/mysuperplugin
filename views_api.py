@@ -56,6 +56,7 @@ async def api_get_payment():
                 }
             )
             scanJson = scan.json()
+            print(scanJson)
             pay = await client.post(
                 "https://5949-177-84-220-121.ngrok-free.app/api/v1/payments/lnurl",
                 headers = {
