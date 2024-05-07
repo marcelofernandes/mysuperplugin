@@ -51,9 +51,7 @@ async def api_get_payment():
         async with httpx.AsyncClient() as client:
             resp = await client.get(
                 "https://5949-177-84-220-121.ngrok-free.app/api/v1/lnurlscan/marcelo@5949-177-84-220-121.ngrok-free.app",
-                headers= {
-                    "accept": "application/json, text/plain, */*", "x-api-key": "90a427aa761447a5b322cd99727a4db6"
-                }
+                headers={"x-api-key": "90a427aa761447a5b322cd99727a4db6"}
             )
             return resp
     except Exception as e:
