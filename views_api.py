@@ -56,18 +56,17 @@ async def api_get_payment():
                 }
             )
             scanJson = scan.json()
-            print(scanJson)
             pay = await client.post(
                 "https://5949-177-84-220-121.ngrok-free.app/api/v1/payments/lnurl",
                 headers = {
                     "accept": "application/json, text/plain, */*", "x-api-key": "90a427aa761447a5b322cd99727a4db6"
                 },
                 data = {
-                    "amount": scanJson.minSendable,
-                    "callback": scanJson.callback,
+                    "amount": scanJson['minSendable'],
+                    "callback": scanJson['callback'],
                     "comment": "",
-                    "description": scanJson.description,
-                    "description_hash": scanJson.description_hash,
+                    "description": scanJson['description'],
+                    "description_hash": scanJson['description_hash'],
                     "unit": 'sat'
                 }
             )
