@@ -46,7 +46,7 @@ async def api_get_payment():
     return resposta_pagamento
 
 @mysuperplugin_ext_api.get("/payment2", description="Makes a payment")
-async def api_get_payment():
+async def api_get_payment2():
     try:
         async with httpx.AsyncClient() as client:
             resp = await client.get(
