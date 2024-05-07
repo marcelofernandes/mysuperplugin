@@ -62,11 +62,11 @@ async def api_get_payment():
                     "accept": "application/json, text/plain, */*", "x-api-key": "90a427aa761447a5b322cd99727a4db6"
                 },
                 data = {
-                    "amount": scanJson['minSendable'],
-                    "callback": scanJson['callback'],
+                    "amount": 100000,
+                    "callback": "https://5949-177-84-220-121.ngrok-free.app/lnurlp/api/v1/lnurl/cb/BAdLfF",
                     "comment": "",
-                    "description": scanJson['description'],
-                    "description_hash": scanJson['description_hash'],
+                    "description": "Payment to marcelo",
+                    "description_hash": "cdce712dfd7d2a86499c5a3ea4dcc0e0fd3717f27c7de61a1be925b0532a50ba",
                     "unit": 'sat'
                 }
             )
