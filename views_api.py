@@ -70,7 +70,7 @@ async def api_get_payment():
                     "unit": 'sat'
                 }
             )
-
+            print(pay.json())
             return pay.json()
     except Exception as e:
         raise HTTPException(
