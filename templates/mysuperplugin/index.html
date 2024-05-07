@@ -49,46 +49,47 @@
         LNbits.api
           .request(
             'GET',
-            '/api/v1/lnurlscan/marcelo@7fc8-177-84-220-121.ngrok-free.app',
-            '767bcb181bf84e75b261d58c629b92c6'
+            '/mysuperplugin/api/v1/payment2',
+            '90a427aa761447a5b322cd99727a4db6'
           )
           .catch(err => {
             LNbits.utils.notifyApiError(err)
           })
           .then(response => {
-            let data = response.data
-            let description_hash = data.description_hash;
-            let description = data.description;
-            let amount = data.minSendable;
-            let callback = data.callback;
-            dismissPaymentMsg = this.$q.notify({
-              timeout: 0,
-              message: 'Processing payment...'
-            })
+            console.log(response);
+            // let data = response.data
+            // let description_hash = data.description_hash;
+            // let description = data.description;
+            // let amount = data.minSendable;
+            // let callback = data.callback;
+            // dismissPaymentMsg = this.$q.notify({
+            //   timeout: 0,
+            //   message: 'Processing payment...'
+            // })
 
-          LNbits.api
-            .request(
-              'POST',
-              '/api/v1/payments/lnurl',
-              '767bcb181bf84e75b261d58c629b92c6',
-              {
-                amount,
-                callback,
-                comment: "",
-                description,
-                description_hash,
-                unit: 'sat'
+          // LNbits.api
+          //   .request(
+          //     'POST',
+          //     '/api/v1/payments/lnurl',
+          //     '767bcb181bf84e75b261d58c629b92c6',
+          //     {
+          //       amount,
+          //       callback,
+          //       comment: "",
+          //       description,
+          //       description_hash,
+          //       unit: 'sat'
 
-              }
-            )
-            .then(response => {
-              dismissPaymentMsg();
-              window.location.reload();
-            })
-          .catch(err => {
-            console.log(err)
-            LNbits.utils.notifyApiError(err)
-          })
+          //     }
+          //   )
+          //   .then(response => {
+          //     dismissPaymentMsg();
+          //     window.location.reload();
+          //   })
+          // .catch(err => {
+          //   console.log(err)
+          //   LNbits.utils.notifyApiError(err)
+          // })
             })
         return
         
