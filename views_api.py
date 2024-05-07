@@ -61,16 +61,15 @@ async def api_get_payment():
                 headers = {
                     "accept": "application/json, text/plain, */*", "x-api-key": "90a427aa761447a5b322cd99727a4db6"
                 },
-                data = {
-                    "amount": 100000,
-                    "callback": "https://5949-177-84-220-121.ngrok-free.app/lnurlp/api/v1/lnurl/cb/BAdLfF",
+                json = {
+                    "amount": scanJson['minSendable'],
+                    "callback": scanJson['callback'],
                     "comment": "",
-                    "description": "Payment to marcelo",
-                    "description_hash": "cdce712dfd7d2a86499c5a3ea4dcc0e0fd3717f27c7de61a1be925b0532a50ba",
+                    "description": scanJson['description'],
+                    "description_hash": scanJson['description_hash'],
                     "unit": 'sat'
                 }
             )
-            print(pay.json())
             return pay.json()
     except Exception as e:
         raise HTTPException(
