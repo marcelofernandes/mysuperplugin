@@ -49,14 +49,29 @@ async def api_get_vetted(wallet: WalletTypeInfo = Depends(get_key_type)):
 async def api_get_payment():
     try:
         async with httpx.AsyncClient() as client:
-            resp = await client.get(
+            scan = await client.get(
                 "https://5949-177-84-220-121.ngrok-free.app/api/v1/lnurlscan/marcelo@5949-177-84-220-121.ngrok-free.app",
                 headers= {
                     "accept": "application/json, text/plain, */*", "x-api-key": "90a427aa761447a5b322cd99727a4db6"
                 }
             )
-            print(resp.text)
-            return resp.json()
+            scanJson = scan.json()
+            pay = await client.post(
+                "https://5949-177-84-220-121.ngrok-free.app/api/v1/payments/lnurl",
+                headers = {
+                    "accept": "application/json, text/plain, */*", "x-api-key": "90a427aa761447a5b322cd99727a4db6"
+                },
+                data = {
+                    "amount": scanJson.minSendable,
+                    "callback": scanJson.callback,
+                    "comment": "",
+                    "description": scanJson.description,
+                    "description_hash": scanJson.description_hash,
+                    "unit": 'sat'
+                }
+            )
+
+            return pay.json()
     except Exception as e:
         raise HTTPException(
             status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=str(e)
