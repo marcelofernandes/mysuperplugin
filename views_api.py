@@ -45,19 +45,19 @@ async def api_get_payment():
         )
     return resposta_pagamento
 
-@mysuperplugin_ext_api.get("/payment2", description="Makes a payment")
-async def api_get_payment2():
-    try:
-        async with httpx.AsyncClient() as client:
-            resp = await client.get(
-                "https://5949-177-84-220-121.ngrok-free.app/api/v1/lnurlscan/marcelo@5949-177-84-220-121.ngrok-free.app",
-                headers: {
-                    "accept": "application/json, text/plain, */*", "x-api-key": "90a427aa761447a5b322cd99727a4db6"
-                }
-            )
-            return resp
-    except Exception as e:
-        raise HTTPException(
-            status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=str(e)
-        ) from e
+# @mysuperplugin_ext_api.get("/payment2", description="Makes a payment")
+# async def api_get_payment2():
+#     try:
+#         async with httpx.AsyncClient() as client:
+#             resp = await client.get(
+#                 "https://5949-177-84-220-121.ngrok-free.app/api/v1/lnurlscan/marcelo@5949-177-84-220-121.ngrok-free.app",
+#                 headers: {
+#                     "accept": "application/json, text/plain, */*", "x-api-key": "90a427aa761447a5b322cd99727a4db6"
+#                 }
+#             )
+#             return resp
+#     except Exception as e:
+#         raise HTTPException(
+#             status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=str(e)
+#         ) from e
     
