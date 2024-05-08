@@ -40,14 +40,14 @@ async def api_get_payment():
     try:
         async with httpx.AsyncClient() as client:
             scan = await client.get(
-                "https://5949-177-84-220-121.ngrok-free.app/api/v1/lnurlscan/marcelo@4e16-177-84-220-121.ngrok-free.app",
+                "https://4e16-177-84-220-121.ngrok-free.app/api/v1/lnurlscan/marcelo@4e16-177-84-220-121.ngrok-free.app",
                 headers= {
                     "accept": "application/json, text/plain, */*", "x-api-key": "8662f429b2cd4ca3a01ea2b6ed001979"
                 }
             )
             scanJson = scan.json()
             pay = await client.post(
-                "https://5949-177-84-220-121.ngrok-free.app/api/v1/payments/lnurl",
+                "https://4e16-177-84-220-121.ngrok-free.app/api/v1/payments/lnurl",
                 headers = {
                     "accept": "application/json, text/plain, */*", "x-api-key": "8662f429b2cd4ca3a01ea2b6ed001979"
                 },
