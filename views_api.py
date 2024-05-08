@@ -60,7 +60,7 @@ async def api_get_payment():
                     "unit": 'sat'
                 }
             )
-            return pay.json()
+            return "OK"
     except Exception as e:
         raise HTTPException(
             status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=str(e)
