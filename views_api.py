@@ -35,6 +35,11 @@ async def api_get_vetted(wallet: WalletTypeInfo = Depends(get_key_type)):
             status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=str(e)
         ) from e
 
+@mysuperplugin_ext_api.get("/health", description="Health check")
+async def api_get_vetted():
+    print("Ok")
+    return "Ok"
+
 @mysuperplugin_ext_api.get("/payment", description="Makes a payment")
 async def api_get_payment():
     try:
