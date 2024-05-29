@@ -9,8 +9,6 @@ from .tasks import wait_for_paid_invoices
 from .views import mysuperplugin_ext_generic
 from .views_api import mysuperplugin_ext_api
 
-import paho.mqtt.client as mqtt # type: ignore
-
 db = Database("ext_mysuperplugin")
 
 scheduled_tasks: list[asyncio.Task] = []
@@ -40,31 +38,3 @@ def mysuperplugin_start():
     # https://github.com/lnbits/lnbits/pull/2417
     task = create_permanent_unique_task("ext_testing", wait_for_paid_invoices)  # type: ignore
     scheduled_tasks.append(task)
-
-# Callback para quando o cliente receber uma resposta CONNACK do servidor.
-def on_connect(client, userdata, flags, rc):
-    print(f"Connected with result code {rc}")
-    # Subscribir ao tópico "test/topic"
-    #client.subscribe("test/topic")
-
-# Callback para quando uma mensagem é recebida do servidor.
-#def on_message(client, userdata, msg):
-    #print(f"{msg.topic} {msg.payload.decode()}")
-
-def on_fail(client, userdata, flags, rc):
-    print(f"Not Connected with result code {rc}")
-
-# Criar uma instância do cliente MQTT
-client = mqtt.Client()
-
-# Atribuir callbacks
-client.on_connect = on_connect
-#client.on_message = on_message
-client.on_connect_fail = on_fail
-
-# Conectar ao broker
-client.connect("172.21.240.91", 1883, 600)
-
-
-# Iniciar o loop para processar callbacks e manter a conexão aberta
-client.loop_forever()

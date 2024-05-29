@@ -51,7 +51,7 @@
         LNbits.api
           .request(
             'GET',
-            '/mysuperplugin/api/v1/payment',
+            '/mysuperplugin/api/v1/mqtt',
             '8662f429b2cd4ca3a01ea2b6ed001979'
           )
           .catch(err => {
@@ -61,7 +61,7 @@
           .then(response => {
             if (response.data.payment_hash) {
               dismissPaymentMsg();
-              window.location.reload();
+              // window.location.reload();
             }
           })
         return;
