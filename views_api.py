@@ -6,6 +6,7 @@ from fastapi.exceptions import HTTPException
 from lnbits.decorators import WalletTypeInfo, get_key_type
 # from lnbits.core.services import pay_invoice
 import paho.mqtt.client as mqtt # type: ignore
+import time
 
 from .models import Example
 
@@ -101,7 +102,13 @@ async def api_get_mqtt():
         client.connect("172.21.240.91", 1883, 600)
 
         # Iniciar o loop para processar callbacks e manter a conexão aberta
-        client.loop_forever()
+        client.loop_start()
+        try:
+            while True:
+                print("Doing other tasks...")
+                time.sleep(5)
+        except KeyboardInterrupt:
+            print("Exiting...")
     except Exception as e:
         raise HTTPException(
             status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=str(e)
