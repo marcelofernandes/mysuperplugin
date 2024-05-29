@@ -63,11 +63,8 @@ client.on_connect = on_connect
 client.on_connect_fail = on_fail
 
 # Conectar ao broker
-try:
-    client.connect("172.21.240.91", 1883, 600)
-except Exception as ex:
-    print(ex)
+client.connect("172.21.240.91", 1883, 600)
 
 
 # Iniciar o loop para processar callbacks e manter a conexão aberta
-#client.loop_forever()
+client.loop_forever()
