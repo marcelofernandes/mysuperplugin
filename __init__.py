@@ -59,9 +59,9 @@ client = mqtt.Client()
 #client.on_message = on_message
 
 # Conectar ao broker
-print(client)
 try:
     client.connect("172.21.240.91", 1883, 600)
+    print("connected! ", client)
 except Exception as ex:
     print(ex)
 
