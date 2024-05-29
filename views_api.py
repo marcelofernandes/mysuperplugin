@@ -4,7 +4,7 @@ import httpx
 from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 from lnbits.decorators import WalletTypeInfo, get_key_type
-from lnbits.core.services import pay_invoice
+# from lnbits.core.services import pay_invoice
 
 from .models import Example
 
