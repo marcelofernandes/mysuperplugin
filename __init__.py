@@ -42,32 +42,24 @@ def mysuperplugin_start():
     scheduled_tasks.append(task)
 
 # Callback para quando o cliente receber uma resposta CONNACK do servidor.
-def on_connect(client, userdata, flags, rc):
-    print(f"Connected with result code {rc}")
+#def on_connect(client, userdata, flags, rc):
+    #print(f"Connected with result code {rc}")
     # Subscribir ao tópico "test/topic"
-    client.subscribe("test/topic")
+    #client.subscribe("test/topic")
 
 # Callback para quando uma mensagem é recebida do servidor.
-def on_message(client, userdata, msg):
-    print(f"{msg.topic} {msg.payload.decode()}")
+#def on_message(client, userdata, msg):
+    #print(f"{msg.topic} {msg.payload.decode()}")
 
 # Criar uma instância do cliente MQTT
 client = mqtt.Client()
 
 # Atribuir callbacks
-client.on_connect = on_connect
-client.on_message = on_message
-
-# Configurar conexão SSL/TLS se necessário
-# client.tls_set(ca_certs="/etc/mosquitto/certs/ca.crt",
-#                certfile="/etc/mosquitto/certs/client.crt",
-#                keyfile="/etc/mosquitto/certs/client.key")
-
-# Configurar autenticação se necessário
-# client.username_pw_set("username", "password")
+#client.on_connect = on_connect
+#client.on_message = on_message
 
 # Conectar ao broker
-client.connect("localhost", 1883, 600)
+#client.connect("localhost", 1883, 600)
 
 # Iniciar o loop para processar callbacks e manter a conexão aberta
-client.loop_forever()
+#client.loop_forever()
