@@ -42,10 +42,10 @@ def mysuperplugin_start():
     scheduled_tasks.append(task)
 
 # Callback para quando o cliente receber uma resposta CONNACK do servidor.
-def on_connect(client, userdata, flags, rc):
-    print(f"Connected with result code {rc}")
+#def on_connect(client, userdata, flags, rc):
+    #print(f"Connected with result code {rc}")
     # Subscribir ao tópico "test/topic"
-    client.subscribe("test/topic")
+    #client.subscribe("test/topic")
 
 # Callback para quando uma mensagem é recebida do servidor.
 #def on_message(client, userdata, msg):
@@ -55,11 +55,15 @@ def on_connect(client, userdata, flags, rc):
 client = mqtt.Client()
 
 # Atribuir callbacks
-client.on_connect = on_connect
+# client.on_connect = on_connect
 #client.on_message = on_message
 
 # Conectar ao broker
-client.connect("172.21.240.91", 1883, 600)
+try:
+    client.connect("172.21.240.91", 1883, 600)
+except Exception as ex:
+    print(ex)
+
 
 # Iniciar o loop para processar callbacks e manter a conexão aberta
 #client.loop_forever()
