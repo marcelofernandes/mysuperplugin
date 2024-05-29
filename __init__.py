@@ -48,18 +48,18 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("test/topic")
 
 # Callback para quando uma mensagem é recebida do servidor.
-def on_message(client, userdata, msg):
-    print(f"{msg.topic} {msg.payload.decode()}")
+#def on_message(client, userdata, msg):
+    #print(f"{msg.topic} {msg.payload.decode()}")
 
 # Criar uma instância do cliente MQTT
 client = mqtt.Client()
 
 # Atribuir callbacks
 client.on_connect = on_connect
-client.on_message = on_message
+#client.on_message = on_message
 
 # Conectar ao broker
 client.connect("172.21.240.91", 1883, 600)
 
 # Iniciar o loop para processar callbacks e manter a conexão aberta
-client.loop_forever()
+#client.loop_forever()
