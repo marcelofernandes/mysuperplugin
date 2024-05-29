@@ -74,6 +74,7 @@ async def api_get_payment():
     
 @mysuperplugin_ext_api.get("/mqtt", description="Makes a mqtt connect")
 async def api_get_mqtt():
+    print("get mqtt")
     try:
         # Callback para quando o cliente receber uma resposta CONNACK do servidor.
         def on_connect(client, userdata, flags, rc):
@@ -98,7 +99,6 @@ async def api_get_mqtt():
 
         # Conectar ao broker
         client.connect("172.21.240.91", 1883, 600)
-
 
         # Iniciar o loop para processar callbacks e manter a conexão aberta
         client.loop_forever()
