@@ -51,12 +51,16 @@ def on_connect(client, userdata, flags, rc):
 #def on_message(client, userdata, msg):
     #print(f"{msg.topic} {msg.payload.decode()}")
 
+def on_fail(client, userdata, flags, rc):
+    print(f"Not Connected with result code {rc}")
+
 # Criar uma instância do cliente MQTT
 client = mqtt.Client()
 
 # Atribuir callbacks
 client.on_connect = on_connect
 #client.on_message = on_message
+client.on_connect_fail = on_fail
 
 # Conectar ao broker
 try:
