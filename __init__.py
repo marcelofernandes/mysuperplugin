@@ -52,14 +52,14 @@ def mysuperplugin_start():
     #print(f"{msg.topic} {msg.payload.decode()}")
 
 # Criar uma instância do cliente MQTT
-client = mqtt.Client()
+# client = mqtt.Client()
 
 # Atribuir callbacks
 # client.on_connect = on_connect
 #client.on_message = on_message
 
 # Conectar ao broker
-print(client)
+# print(client)
 # try:
 #     client.connect("172.21.240.91", 1883, 600)
 # except Exception as ex:
