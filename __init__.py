@@ -60,10 +60,10 @@ client = mqtt.Client()
 
 # Conectar ao broker
 print(client)
-# try:
-#     client.connect("172.21.240.91", 1883, 600)
-# except Exception as ex:
-#     print(ex)
+try:
+    client.connect("172.21.240.91", 1883, 600)
+except Exception as ex:
+    print(ex)
 
 
 # Iniciar o loop para processar callbacks e manter a conexão aberta
