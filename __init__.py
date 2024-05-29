@@ -52,7 +52,7 @@ def mysuperplugin_start():
     #print(f"{msg.topic} {msg.payload.decode()}")
 
 # Criar uma instância do cliente MQTT
-# client = mqtt.Client()
+client = mqtt.Client()
 
 # Atribuir callbacks
 # client.on_connect = on_connect
