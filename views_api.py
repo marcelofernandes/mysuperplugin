@@ -79,23 +79,23 @@ async def api_get_mqtt():
     try:
         # Callback para quando o cliente receber uma resposta CONNACK do servidor.
         def on_connect(client, userdata, flags, rc):
-            print("Connected with result code")
+            print(f"Connected with result code {rc}")
             # Subscribir ao tópico "test/topic"
             client.subscribe("test/topic")
 
         # Callback para quando uma mensagem é recebida do servidor.
-        #def on_message(client, userdata, msg):
-            #print(f"{msg.topic} {msg.payload.decode()}")
+        def on_message(client, userdata, msg):
+            print(f"{msg.topic} {msg.payload.decode()}")
 
         def on_fail(client, userdata, flags, rc):
-            print("Not Connected with result code")
+            print(f"Not Connected with result code {rc}")
 
         # Criar uma instância do cliente MQTT
         client = mqtt.Client()
 
         # Atribuir callbacks
         client.on_connect = on_connect
-        #client.on_message = on_message
+        client.on_message = on_message
         client.on_connect_fail = on_fail
 
         # Conectar ao broker
