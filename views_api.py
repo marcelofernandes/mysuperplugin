@@ -6,6 +6,8 @@ from fastapi.exceptions import HTTPException
 from lnbits.decorators import WalletTypeInfo, get_key_type
 # from lnbits.core.services import pay_invoice
 import paho.mqtt.client as mqtt # type: ignore
+import threading
+import time
 
 from .models import Example
 
@@ -76,32 +78,58 @@ async def api_get_payment():
 async def api_get_mqtt():
     print("get mqtt")
     try:
-        # Callback para quando o cliente receber uma resposta CONNACK do servidor.
+        def on_subscribe(client, userdata, flags, rc):
+            print(f"Subscribed with result code {rc}")
+
         def on_connect(client, userdata, flags, rc):
             print(f"Connected with result code {rc}")
-            # Subscribir ao tópico "test/topic"
+            if rc == 0:
+                print("Successfully connected to broker")
+            else:
+                print(f"Failed to connect, return code {rc}")
+            client.on_subscribe = on_subscribe
             client.subscribe("test/topic")
 
-        # Callback para quando uma mensagem é recebida do servidor.
         def on_message(client, userdata, msg):
             print(f"{msg.topic} {msg.payload.decode()}")
 
         def on_fail(client, userdata, flags, rc):
             print(f"Not Connected with result code {rc}")
 
+        def on_disconnect(client, userdata, flags, rc):
+            print(f"Disconected with result code {rc}")
+
+        def mqtt_client_thread():
+            client = mqtt.Client()
+            client.on_connect = on_connect
+            client.on_message = on_message
+            client.on_fail = on_fail
+            client.on_disconnect = on_disconnect
+            
+            try:
+                client.connect("172.21.240.91", 1883, 60)
+                client.loop_forever()
+            except Exception as e:
+                print(f"Exception occurred: {e}")
+            #client.connect("172.21.240.91", 1883, 600)
+            #client.loop_forever()
+
         # Criar uma instância do cliente MQTT
-        client = mqtt.Client()
+        #client = mqtt.Client()
 
         # Atribuir callbacks
-        client.on_connect = on_connect
-        client.on_message = on_message
-        client.on_connect_fail = on_fail
+        # client.on_connect = on_connect
+        # client.on_message = on_message
+        # client.on_connect_fail = on_fail
 
         # Conectar ao broker
-        client.connect("172.21.240.91", 1883, 600)
+        # client.connect("172.21.240.91", 1883, 600)
 
         # Iniciar o loop para processar callbacks e manter a conexão aberta
-        client.loop_start()
+        # client.loop_start()
+
+        mqtt_thread = threading.Thread(target=mqtt_client_thread)
+        mqtt_thread.start()
         return "MQTT Ok"
     except Exception as e:
         raise HTTPException(
