@@ -41,6 +41,7 @@ async def api_get_vetted(wallet: WalletTypeInfo = Depends(get_key_type)):
 @mysuperplugin_ext_api.get("/health-check", description="Health check")
 async def api_get_health_check():
     print("Ok")
+    time.sleep(10)
     return "Ok"
 
 @mysuperplugin_ext_api.get("/payment", description="Makes a payment")
