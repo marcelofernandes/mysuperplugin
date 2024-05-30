@@ -9,7 +9,7 @@ import paho.mqtt.client as mqtt # type: ignore
 import threading
 import time
 import asyncio
-from .mqtt_client.py import MQTTClient # type: ignore
+from .mqtt_client import MQTTClient # type: ignore
 from pydantic import BaseModel # type: ignore
 
 from .models import Example
