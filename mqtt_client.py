@@ -22,7 +22,7 @@ class MQTTClient:
     def on_message(self, client, userdata, msg):
         print(f"Received message '{msg.payload.decode()}' on topic '{msg.topic}'")
 
-    def on_subscribe(client, userdata, mid, granted_qos):
+    def on_subscribe(self, client, userdata, mid, granted_qos):
         print(f"Subscribed: {mid} QoS: {granted_qos}")
 
     def connect(self):
