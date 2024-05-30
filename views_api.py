@@ -6,7 +6,6 @@ from fastapi.exceptions import HTTPException
 from lnbits.decorators import WalletTypeInfo, get_key_type
 # from lnbits.core.services import pay_invoice
 import paho.mqtt.client as mqtt # type: ignore
-import time
 
 from .models import Example
 
