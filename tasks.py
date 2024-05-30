@@ -8,7 +8,6 @@ from lnbits.core.models import Payment
 from lnbits.tasks import register_invoice_listener
 from loguru import logger
 
-from .mqtt_client import mqtt_client
 
 async def wait_for_paid_invoices():
     invoice_queue = asyncio.Queue()
@@ -18,8 +17,6 @@ async def wait_for_paid_invoices():
         payment = await invoice_queue.get()
         await on_invoice_paid(payment)
 
-async def wait_for_mqtt():
-    asyncio.create_task(mqtt_client.connect())
 
 async def on_invoice_paid(payment: Payment) -> None:
     if (

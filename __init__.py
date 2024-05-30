@@ -5,7 +5,7 @@ from lnbits.db import Database # type: ignore
 from lnbits.tasks import create_permanent_unique_task # type: ignore
 from loguru import logger # type: ignore
 
-from .tasks import wait_for_mqtt
+from .tasks import wait_for_paid_invoices
 from .views import mysuperplugin_ext_generic
 from .views_api import mysuperplugin_ext_api
 
@@ -38,19 +38,19 @@ def mysuperplugin_stop():
         except Exception as ex:
             logger.warning(ex)
 
-# def init_mysuperplugin(app: FastAPI):
-#     @app.on_event("startup")
-#     async def startup_event():
-#         asyncio.create_task(mqtt_client.connect())
+def init_mysuperplugin(app: FastAPI):
+    @app.on_event("startup")
+    async def startup_event():
+        asyncio.create_task(mqtt_client.connect())
 
 def mysuperplugin_start():
     # ignore will be removed in lnbits `0.12.6`
     # https://github.com/lnbits/lnbits/pull/2417
-    task = create_permanent_unique_task("ext_mqtt", wait_for_mqtt)  # type: ignore
+    task = create_permanent_unique_task("ext_testing", wait_for_paid_invoices)  # type: ignore
     scheduled_tasks.append(task)
 
-# mysuperplugin_app = FastAPI()
-# init_mysuperplugin(mysuperplugin_app)
+mysuperplugin_app = FastAPI()
+init_mysuperplugin(mysuperplugin_app)
 
 # def on_subscribe(client, userdata, flags, rc):
 #     print(f"Subscribed with result code {rc}")
