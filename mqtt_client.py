@@ -26,6 +26,6 @@ class MQTTClient:
         print(f"Subscribed: {mid} QoS: {granted_qos}")
 
     def connect(self):
-        self.client.connect(self.broker_url, self.broker_port, 60)
+        self.client.connect(self.broker_url, self.broker_port, 5)
         self.client.loop_start()
 
