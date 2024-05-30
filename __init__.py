@@ -49,8 +49,8 @@ def mysuperplugin_start():
     task = create_permanent_unique_task("ext_mqtt", wait_for_mqtt)  # type: ignore
     scheduled_tasks.append(task)
 
-mysuperplugin_app = FastAPI()
-init_mysuperplugin(mysuperplugin_app)
+# mysuperplugin_app = FastAPI()
+# init_mysuperplugin(mysuperplugin_app)
 
 # def on_subscribe(client, userdata, flags, rc):
 #     print(f"Subscribed with result code {rc}")
