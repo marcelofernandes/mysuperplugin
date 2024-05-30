@@ -25,6 +25,12 @@ mysuperplugin_static_files = [
     }
 ]
 
+async def startup_event():
+    await mqtt_client.connect()
+
+task2 = create_permanent_unique_task("ext_mqtt2", startup_event)  # type: ignore
+scheduled_tasks.append(task2)
+
 
 def mysuperplugin_stop():
     for task in scheduled_tasks:
@@ -36,10 +42,7 @@ def mysuperplugin_stop():
 def mysuperplugin_start():
     # ignore will be removed in lnbits `0.12.6`
     # https://github.com/lnbits/lnbits/pull/2417
-    # task = create_permanent_unique_task("ext_testing", wait_for_paid_invoices)  # type: ignore
-    async def startup_event():
-        await mqtt_client.connect()
-    task = create_permanent_unique_task("ext_testing", startup_event)  # type: ignore
+    task = create_permanent_unique_task("ext_testing", wait_for_paid_invoices)  # type: ignore
     scheduled_tasks.append(task)
 
 # def on_subscribe(client, userdata, flags, rc):
