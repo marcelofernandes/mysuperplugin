@@ -79,16 +79,16 @@ async def api_get_mqtt():
     try:
         # Callback para quando o cliente receber uma resposta CONNACK do servidor.
         def on_connect(client, userdata, flags, rc):
-            print(f"Connected with result code {rc}")
+            print("Connected with result code")
             # Subscribir ao tópico "test/topic"
-            #client.subscribe("test/topic")
+            client.subscribe("test/topic")
 
         # Callback para quando uma mensagem é recebida do servidor.
         #def on_message(client, userdata, msg):
             #print(f"{msg.topic} {msg.payload.decode()}")
 
         def on_fail(client, userdata, flags, rc):
-            print(f"Not Connected with result code {rc}")
+            print("Not Connected with result code")
 
         # Criar uma instância do cliente MQTT
         client = mqtt.Client()
@@ -103,12 +103,7 @@ async def api_get_mqtt():
 
         # Iniciar o loop para processar callbacks e manter a conexão aberta
         client.loop_start()
-        try:
-            while True:
-                print("Doing other tasks...")
-                time.sleep(5)
-        except KeyboardInterrupt:
-            print("Exiting...")
+        return "MQTT Ok"
     except Exception as e:
         raise HTTPException(
             status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=str(e)
