@@ -20,7 +20,7 @@ async def wait_for_paid_invoices():
 
 async def wait_for_mqtt():
     invoice_queue = asyncio.Queue()
-    register_invoice_listener(invoice_queue, "mysuperplugin2")
+    register_invoice_listener(invoice_queue, "mysuperplugin")
     asyncio.create_task(mqtt_client.connect())
 
 async def on_invoice_paid(payment: Payment) -> None:
