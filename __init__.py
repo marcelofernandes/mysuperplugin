@@ -17,7 +17,6 @@ import asyncio
 from fastapi import FastAPI # type: ignore
 
 from .mqtt_client import mqtt_client
-from .views_api import router as mysuperplugin_router
 
 def init_mysuperplugin(app: FastAPI):
     @app.on_event("startup")
