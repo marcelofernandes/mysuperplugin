@@ -13,6 +13,21 @@ import paho.mqtt.client as mqtt # type: ignore
 # import threading
 import time
 
+import asyncio
+from fastapi import FastAPI # type: ignore
+
+from .mqtt_client import mqtt_client
+from .views_api import router as mysuperplugin_router
+
+def init_mysuperplugin(app: FastAPI):
+    @app.on_event("startup")
+    async def startup_event():
+        asyncio.create_task(mqtt_client.connect())
+
+# Crie um objeto `mysuperplugin_app` para inicializar a extensão na aplicação principal
+mysuperplugin_app = FastAPI()
+init_mysuperplugin(mysuperplugin_app)
+
 db = Database("ext_mysuperplugin")
 
 scheduled_tasks: list[asyncio.Task] = []

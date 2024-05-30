@@ -17,16 +17,15 @@ class MQTTClient:
         print(f"{msg.topic} {msg.payload.decode()}")
 
     async def connect(self):
-        self.client.connect(self.broker_url, self.broker_port, 60)
         loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, self.client.connect, self.broker_url, self.broker_port, 60)
         await loop.run_in_executor(None, self.client.loop_forever)
 
     def publish(self, topic, payload):
         self.client.publish(topic, payload)
 
 # Configuração do cliente MQTT
-broker_address = "172.21.240.91"
-port = 1883
+broker_address = "172.21.240.91"  # Substitua pelo endereço do seu broker
+port = 1883                   # Substitua pela porta usada pelo seu broker
 
 mqtt_client = MQTTClient(broker_address, port)
-asyncio.run(mqtt_client.connect())
