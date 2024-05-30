@@ -8,6 +8,7 @@ from lnbits.decorators import WalletTypeInfo, get_key_type
 import paho.mqtt.client as mqtt # type: ignore
 import threading
 import time
+import asyncio
 
 from .models import Example
 
@@ -41,7 +42,7 @@ async def api_get_vetted(wallet: WalletTypeInfo = Depends(get_key_type)):
 @mysuperplugin_ext_api.get("/health-check", description="Health check")
 async def api_get_health_check():
     print("Ok")
-    time.sleep(10)
+    await asyncio.sleep(10)
     return "Ok"
 
 @mysuperplugin_ext_api.get("/payment", description="Makes a payment")
