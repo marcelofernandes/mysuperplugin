@@ -25,18 +25,6 @@ mysuperplugin_ext_api = APIRouter(
 mqtt_client = MQTTClient(broker_url="172.21.240.91", broker_port=1883)
 mqtt_client.connect()
 
-class PublishRequest(BaseModel):
-    topic: str
-    message: str
-
-@mysuperplugin_ext_api.post("/publish", description="Example API endpoint")
-async def publish_message(request: PublishRequest):
-    try:
-        mqtt_client.publish(request.topic, request.message)
-        return {"status": "Message published"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
 @mysuperplugin_ext_api.get("/test/{mysuperplugin_data}", description="Example API endpoint")
 async def api_mysuperplugin(mysuperplugin_data: str) -> Example:
     # Do some python things and return the data
