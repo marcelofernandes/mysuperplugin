@@ -12,6 +12,7 @@ class MQTTClient:
 
     def on_connect(self, client, userdata, flags, rc):
         print(f"Connected to MQTT broker with result code {rc}")
+        client.subscribe("test/topic")
 
     def on_message(self, client, userdata, msg):
         print(f"Received message '{msg.payload.decode()}' on topic '{msg.topic}'")
