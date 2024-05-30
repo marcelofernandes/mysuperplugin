@@ -79,3 +79,11 @@ def mqtt_client_thread():
 
 mqtt_thread = threading.Thread(target=mqtt_client_thread)
 mqtt_thread.start()
+
+try:
+    while True:
+        print("Doing main application tasks...")
+        time.sleep(5)
+except KeyboardInterrupt:
+    print("Exiting main application...")
+    mqtt_thread.join()
