@@ -10,6 +10,8 @@ from .views import mysuperplugin_ext_generic
 from .views_api import mysuperplugin_ext_api
 
 import paho.mqtt.client as mqtt # type: ignore
+import threading
+import time
 
 db = Database("ext_mysuperplugin")
 
@@ -53,16 +55,27 @@ def on_message(client, userdata, msg):
 def on_fail(client, userdata, flags, rc):
     print(f"Not Connected with result code {rc}")
 
+def mqtt_client_thread():
+    client = mqtt.Client()
+    client.on_connect = on_connect
+    client.on_message = on_message
+    client.on_fail = on_fail
+    client.connect("172.21.240.91", 1883, 600)
+    client.loop_forever()
+
 # Criar uma instância do cliente MQTT
-client = mqtt.Client()
+#client = mqtt.Client()
 
 # Atribuir callbacks
-client.on_connect = on_connect
-client.on_message = on_message
-client.on_connect_fail = on_fail
+# client.on_connect = on_connect
+# client.on_message = on_message
+# client.on_connect_fail = on_fail
 
 # Conectar ao broker
-client.connect("172.21.240.91", 1883, 600)
+# client.connect("172.21.240.91", 1883, 600)
 
 # Iniciar o loop para processar callbacks e manter a conexão aberta
-client.loop_start()
+# client.loop_start()
+
+mqtt_thread = threading.Thread(target=mqtt_client_thread)
+mqtt_thread.start()
