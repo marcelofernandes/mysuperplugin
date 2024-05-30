@@ -45,10 +45,12 @@ def mysuperplugin_start():
 
 def on_connect(client, userdata, flags, rc):
     print(f"Connected with result code {rc}")
-    # Subscribir ao tópico "test/topic"
+    if rc == 0:
+        print("Successfully connected to broker")
+    else:
+        print(f"Failed to connect, return code {rc}")
     client.subscribe("test/topic")
 
-# Callback para quando uma mensagem é recebida do servidor.
 def on_message(client, userdata, msg):
     print(f"{msg.topic} {msg.payload.decode()}")
 
@@ -60,8 +62,13 @@ def mqtt_client_thread():
     client.on_connect = on_connect
     client.on_message = on_message
     client.on_fail = on_fail
-    client.connect("172.21.240.91", 1883, 600)
-    client.loop_forever()
+    try:
+        client.connect("172.21.240.91", 1883, 60)
+        client.loop_forever()
+    except Exception as e:
+        print(f"Exception occurred: {e}")
+    #client.connect("172.21.240.91", 1883, 600)
+    #client.loop_forever()
 
 # Criar uma instância do cliente MQTT
 #client = mqtt.Client()
