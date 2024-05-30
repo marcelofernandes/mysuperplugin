@@ -28,7 +28,7 @@ mysuperplugin_static_files = [
 async def startup_event():
     await mqtt_client.connect()
 
-task2 = create_permanent_unique_task(startup_event)  # type: ignore
+task2 = create_permanent_unique_task("ext_mqtt2", startup_event)  # type: ignore
 scheduled_tasks.append(task2)
 
 

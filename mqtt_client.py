@@ -17,9 +17,8 @@ class MQTTClient:
         print(f"{msg.topic} {msg.payload.decode()}")
 
     async def connect(self):
-        loop = asyncio.get_event_loop()
-        await loop.run_in_executor(None, self.client.connect, self.broker_url, self.broker_port, 60)
-        await loop.run_in_executor(None, self.client.loop_forever)
+        self.client.connect("172.21.240.91", 1883, 60)
+        self.client.loop_forever()
 
     def publish(self, topic, payload):
         self.client.publish(topic, payload)
