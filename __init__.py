@@ -44,9 +44,9 @@ def mysuperplugin_start():
     scheduled_tasks.append(task)
 
 def on_connect(client, userdata, flags, rc):
-            print(f"Connected with result code {rc}")
-            # Subscribir ao tópico "test/topic"
-            client.subscribe("test/topic")
+    print(f"Connected with result code {rc}")
+    # Subscribir ao tópico "test/topic"
+    client.subscribe("test/topic")
 
 # Callback para quando uma mensagem é recebida do servidor.
 def on_message(client, userdata, msg):
