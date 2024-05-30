@@ -19,7 +19,7 @@ async def wait_for_paid_invoices():
         await on_invoice_paid(payment)
 
 async def wait_for_mqtt():
-    await asyncio.create_task(mqtt_client.connect())
+    asyncio.create_task(mqtt_client.connect())
 
 async def on_invoice_paid(payment: Payment) -> None:
     if (
