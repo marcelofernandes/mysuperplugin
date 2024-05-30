@@ -18,7 +18,7 @@ class MQTTClient:
 
     async def connect(self):
         self.client.connect("172.21.240.91", 1883, 60)
-        self.client.loop_forever()
+        self.client.loop_start()
 
     def publish(self, topic, payload):
         self.client.publish(topic, payload)
