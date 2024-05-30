@@ -21,10 +21,6 @@ mysuperplugin_ext_api = APIRouter(
     tags=["mysuperplugin"],
 )
 
-# Configurar o cliente MQTT
-mqtt_client = MQTTClient(broker_url="172.21.240.91", broker_port=1883)
-mqtt_client.connect()
-
 @mysuperplugin_ext_api.get("/test/{mysuperplugin_data}", description="Example API endpoint")
 async def api_mysuperplugin(mysuperplugin_data: str) -> Example:
     # Do some python things and return the data

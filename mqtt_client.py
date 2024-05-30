@@ -1,7 +1,7 @@
 # mysuperplugin/mqtt_client.py
 
 import paho.mqtt.client as mqtt # type: ignore
-import threading
+import asyncio
 
 class MQTTClient:
     def __init__(self, broker_url, broker_port):
@@ -26,9 +26,11 @@ class MQTTClient:
     def on_subscribe(self, client, userdata, mid, granted_qos):
         print(f"Subscribed: {mid} QoS: {granted_qos}")
 
-    def connect(self):
+    async def connect(self):
         self.client.connect(self.broker_url, self.broker_port, 60)
-        thread = threading.Thread(target=self.client.loop_forever)
-        thread.daemon = True
-        thread.start()
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, self.client.loop_forever)
 
+# Configurar o cliente MQTT
+mqtt_client = MQTTClient(broker_url="172.21.240.91", broker_port=1883)
+asyncio.run(mqtt_client.connect())
