@@ -132,7 +132,7 @@ async def api_get_mqtt():
 
         # mqtt_thread = threading.Thread(target=mqtt_client_thread)
         # mqtt_thread.start()
-        time.sleep(30)
+        await asyncio.sleep(20)
         return "MQTT Ok"
     except Exception as e:
         raise HTTPException(
