@@ -101,6 +101,9 @@ async def api_get_mqtt():
         def on_disconnect(client, userdata, flags, rc):
             print(f"Disconected with result code {rc}")
 
+        def on_log(client, userdata, flags, rc):
+            print(f"Log: {rc}")
+        
         # def mqtt_client_thread():
         #     client = mqtt.Client()
         #     client.on_connect = on_connect
@@ -123,6 +126,7 @@ async def api_get_mqtt():
         client.on_connect = on_connect
         client.on_message = on_message
         client.on_connect_fail = on_fail
+        client.on_log = on_log
 
         # Conectar ao broker
         client.connect("172.21.240.91", 1883, 600)

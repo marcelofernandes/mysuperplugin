@@ -43,26 +43,26 @@ def mysuperplugin_start():
     task = create_permanent_unique_task("ext_testing", wait_for_paid_invoices)  # type: ignore
     scheduled_tasks.append(task)
 
-def on_subscribe(client, userdata, flags, rc):
-    print(f"Subscribed with result code {rc}")
+# def on_subscribe(client, userdata, flags, rc):
+#     print(f"Subscribed with result code {rc}")
 
-def on_connect(client, userdata, flags, rc):
-    print(f"Connected with result code {rc}")
-    if rc == 0:
-        print("Successfully connected to broker")
-    else:
-        print(f"Failed to connect, return code {rc}")
-    client.on_subscribe = on_subscribe
-    client.subscribe("test/topic")
+# def on_connect(client, userdata, flags, rc):
+#     print(f"Connected with result code {rc}")
+#     if rc == 0:
+#         print("Successfully connected to broker")
+#     else:
+#         print(f"Failed to connect, return code {rc}")
+#     client.on_subscribe = on_subscribe
+#     client.subscribe("test/topic")
 
-def on_message(client, userdata, msg):
-    print(f"{msg.topic} {msg.payload.decode()}")
+# def on_message(client, userdata, msg):
+#     print(f"{msg.topic} {msg.payload.decode()}")
 
-def on_fail(client, userdata, flags, rc):
-    print(f"Not Connected with result code {rc}")
+# def on_fail(client, userdata, flags, rc):
+#     print(f"Not Connected with result code {rc}")
 
-def on_disconnect(client, userdata, flags, rc):
-    print(f"Disconected with result code {rc}")
+# def on_disconnect(client, userdata, flags, rc):
+#     print(f"Disconected with result code {rc}")
 
 # def mqtt_client_thread():
 #     client = mqtt.Client()
@@ -79,16 +79,16 @@ def on_disconnect(client, userdata, flags, rc):
 #     client.connect("172.21.240.91", 1883, 600)
 #     client.loop_forever()
 
-client = mqtt.Client()
+# client = mqtt.Client()
 
-client.on_connect = on_connect
-client.on_message = on_message
-client.on_connect_fail = on_fail
+# client.on_connect = on_connect
+# client.on_message = on_message
+# client.on_connect_fail = on_fail
 
-client.connect("172.21.240.91", 1883, 600)
+# client.connect("172.21.240.91", 1883, 600)
 
-client.loop_start()
-time.sleep(20)
+# client.loop_start()
+# time.sleep(20)
 
 # mqtt_thread = threading.Thread(target=mqtt_client_thread)
 # mqtt_thread.start()
