@@ -30,42 +30,10 @@ mysuperplugin_static_files = [
 
 
 async def startup_event():
-    broker = "172.21.240.91"
-    port = 1883
-    topic = "test/topic"
-    def on_connect(client, userdata, flags, rc):
-        if rc == 0:
-            print("Conectado ao Broker!")
-            client.subscribe(topic)
-        else:
-            print(f"Falha na conexão, código de retorno: {rc}")
-
-    async def on_message(client, userdata, msg):
-        print(f"Mensagem recebida no tópico {msg.topic}: {msg.payload.decode()}")
-        await asyncio.sleep(1)
-
-    def on_message_sync(client, userdata, msg):
-        loop = asyncio.get_event_loop()
-        asyncio.run_coroutine_threadsafe(on_message(client, userdata, msg), loop)
-
-    def on_subscribe(client, userdata, mid, granted_qos):
-        print(f"Inscrição confirmada no tópico {topic} com QoS {granted_qos}")
-
-    def on_unsubscribe(client, userdata, mid):
-        print(f"Inscrição cancelada no tópico {topic}")
-
-    client = mqtt.Client()
-
-    client.on_connect = on_connect
-    client.on_message = on_message_sync
-    client.on_subscribe = on_subscribe
-    client.on_unsubscribe = on_unsubscribe
-    client.connect(broker, port, 60)
-    client.loop_forever()
+    print("test")
 
 task2 = create_permanent_unique_task("ext_mqtt2", startup_event)  # type: ignore
 scheduled_tasks.append(task2)
-
 
 def mysuperplugin_stop():
     for task in scheduled_tasks:
@@ -81,5 +49,37 @@ def mysuperplugin_start():
     scheduled_tasks.append(task)
 
 
+broker = "172.21.240.91"
+port = 1883
+topic = "test/topic"
 
+async def on_message(client, userdata, msg):
+    print(f"Mensagem recebida no tópico {msg.topic}: {msg.payload.decode()}")
+    await asyncio.sleep(1)
+
+def on_message_sync(client, userdata, msg):
+    loop = asyncio.get_event_loop()
+    asyncio.run_coroutine_threadsafe(on_message(client, userdata, msg), loop)
+
+def on_subscribe(client, userdata, mid, granted_qos):
+    print(f"Inscrição confirmada no tópico {topic} com QoS {granted_qos}")
+
+def on_connect(client, userdata, flags, rc):
+    if rc == 0:
+        print("Conectado ao Broker!")
+        client.subscribe(topic)
+    else:
+        print(f"Falha na conexão, código de retorno: {rc}")
+
+def on_unsubscribe(client, userdata, mid):
+    print(f"Inscrição cancelada no tópico {topic}")
+
+client = mqtt.Client()
+
+client.on_connect = on_connect
+client.on_message = on_message_sync
+client.on_subscribe = on_subscribe
+client.on_unsubscribe = on_unsubscribe
+client.connect(broker, port, 60)
+client.loop_start()
 
