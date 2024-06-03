@@ -85,6 +85,7 @@ client.on_disconnect = on_disconnect
 # Conectar ao broker
 client.connect("172.21.240.91", 1883, 600)
 
+print("Loop start")
 # Iniciar o loop para processar callbacks e manter a conexão aberta
 client.loop_start()
 
