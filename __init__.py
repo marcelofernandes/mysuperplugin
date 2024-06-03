@@ -70,7 +70,7 @@ async def tarefa_background():
     def on_fail(client, userdata, flags, rc):
         print(f"Not Connected with result code {rc}")
 
-    def on_disconnect(client, userdata, flags, rc):
+    def on_disconnect(self, client, userdata, flags, rc):
         print(f"Disconected with result code {rc}")
 
     def on_log(client, userdata, flags, rc):
