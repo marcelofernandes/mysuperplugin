@@ -67,10 +67,7 @@ async def on_message(client, userdata, msg):
 
 def on_message_sync(client, userdata, msg):
     loop = asyncio.get_event_loop()
-    if loop.is_running():
-        loop.create_task(on_message(client, userdata, msg))
-    else:
-        asyncio.run(on_message(client, userdata, msg))
+    asyncio.run_coroutine_threadsafe(on_message(client, userdata, msg), loop)
 
 def on_fail(client, userdata, flags, rc):
     print(f"Not Connected with result code {rc}")
