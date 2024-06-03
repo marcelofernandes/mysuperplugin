@@ -11,6 +11,7 @@ from .views_api import mysuperplugin_ext_api
 import paho.mqtt.client as mqtt # type: ignore
 import asyncio
 import time
+import threading
 
 db = Database("ext_mysuperplugin")
 
@@ -90,17 +91,19 @@ async def tarefa_background():
     while True:
         await asyncio.sleep(5)
 
+def chamar_corotina(loop):
+    asyncio.run_coroutine_threadsafe(tarefa_background(), loop)
+
 async def main():
-    # Inicia a tarefa em background
-    asyncio.create_task(tarefa_background())
-    
-    # Código principal continua rodando
-    print("Código principal está rodando")
-    await asyncio.sleep(20)
-    print("Código principal terminou")
+    loop = asyncio.get_event_loop()
+
+    # Criar e iniciar um thread separado que irá chamar a corotina
+    thread = threading.Thread(target=chamar_corotina, args=(loop,))
+    thread.start()
+    thread.join()
 
 # Executa o loop de eventos
-asyncio.run(main())
+main()
 
 # def on_subscribe(client, userdata, flags, rc):
 #     print(f"Subscribed with result code {rc}")
