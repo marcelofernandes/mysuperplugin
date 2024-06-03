@@ -28,11 +28,12 @@ mysuperplugin_static_files = [
     }
 ]
 
-broker = "172.21.240.91"  # Endereço do broker Mosquitto
-port = 1883           # Porta padrão do MQTT
-topic = "test/topic"  # Tópico para se inscrever
 
 async def startup_event():
+    broker = "172.21.240.91"  # Endereço do broker Mosquitto
+    port = 1883           # Porta padrão do MQTT
+    topic = "test/topic"  # Tópico para se inscrever
+    # Função de callback para quando a conexão for estabelecida
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
             print("Conectado ao Broker!")
@@ -48,12 +49,8 @@ async def startup_event():
     # Adaptador para chamar funções assíncronas a partir de callbacks síncronos
     def on_message_sync(client, userdata, msg):
         loop = asyncio.get_event_loop()
-        if loop.is_running():
-            print("Loop runing")
-            loop.create_task(on_message(client, userdata, msg))
-        else:
-            print("Loop not runing")
-            asyncio.run(on_message(client, userdata, msg))
+        # Use run_coroutine_threadsafe para agendar a corrotina no loop principal
+        asyncio.run_coroutine_threadsafe(on_message(client, userdata, msg), loop)
 
     # Função de callback para quando a inscrição for confirmada
     def on_subscribe(client, userdata, mid, granted_qos):
@@ -79,12 +76,12 @@ async def startup_event():
     client.loop_start()
 
     # Mantém o programa em execução
-    # try:
-    #     loop = asyncio.get_event_loop()
-    #     loop.run_forever()
-    # except KeyboardInterrupt:
-    #     client.loop_stop()
-    #     client.disconnect()
+    try:
+        loop = asyncio.get_event_loop()
+        loop.run_forever()
+    except KeyboardInterrupt:
+        client.loop_stop()
+        client.disconnect()
 
 task2 = create_permanent_unique_task("ext_mqtt2", startup_event)  # type: ignore
 scheduled_tasks.append(task2)
