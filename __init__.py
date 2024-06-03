@@ -94,6 +94,13 @@ print("Loop start")
 # Iniciar o loop para processar callbacks e manter a conexão aberta
 client.loop_start()
 
+try:
+    while True:
+        asyncio.sleep(1)
+except KeyboardInterrupt:
+    client.loop_stop()
+    client.disconnect()
+
 # def on_subscribe(client, userdata, flags, rc):
 #     print(f"Subscribed with result code {rc}")
 
