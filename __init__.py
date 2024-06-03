@@ -68,8 +68,10 @@ async def on_message(client, userdata, msg):
 def on_message_sync(client, userdata, msg):
     loop = asyncio.get_event_loop()
     if loop.is_running():
+        print("Loop runing")
         loop.create_task(on_message(client, userdata, msg))
     else:
+        print("Loop not runing")
         asyncio.run(on_message(client, userdata, msg))
 
 # Função de callback para quando a inscrição for confirmada
@@ -96,9 +98,9 @@ client.connect(broker, port, 60)
 client.loop_start()
 
 # Mantém o programa em execução
-# try:
-#     loop = asyncio.get_event_loop()
-#     loop.run_forever()
-# except KeyboardInterrupt:
-#     client.loop_stop()
-#     client.disconnect()
+try:
+    loop = asyncio.get_event_loop()
+    loop.run_forever()
+except KeyboardInterrupt:
+    client.loop_stop()
+    client.disconnect()
