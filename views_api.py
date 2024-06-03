@@ -83,7 +83,6 @@ async def api_get_mqtt():
     try:
         def on_subscribe(client, userdata, flags, rc):
             print(f"Subscribed with result code {rc}")
-            return "MQTT Ok"
 
         def on_unsubscribe(client, userdata, mid):
             print(f"Inscrição cancelada no tópico")
@@ -98,8 +97,10 @@ async def api_get_mqtt():
             client.on_unsubscribe = on_unsubscribe
             client.subscribe("test/topic")
 
-        def on_message(client, userdata, msg):
+        async def on_message(client, userdata, msg):
             print(f"{msg.topic} {msg.payload.decode()}")
+            await asyncio.sleep(1)
+            return "MQTT Ok"
 
         def on_fail(client, userdata, flags, rc):
             print(f"Not Connected with result code {rc}")
