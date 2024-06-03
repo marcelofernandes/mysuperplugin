@@ -91,3 +91,10 @@ client.connect(broker, port, 60)
 
 # Inicia o loop de rede em background
 client.loop_start()
+try:
+    loop = asyncio.get_event_loop()
+    loop.run_forever()
+except KeyboardInterrupt:
+    print("Encerrando...")
+    client.loop_stop()  # Para o loop de rede
+    client.disconnect()  # Desconecta do broker
