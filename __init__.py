@@ -8,7 +8,6 @@ from loguru import logger # type: ignore
 from .tasks import wait_for_paid_invoices
 from .views import mysuperplugin_ext_generic
 from .views_api import mysuperplugin_ext_api
-from .mqtt_client import mqtt_client
 
 db = Database("ext_mysuperplugin")
 
