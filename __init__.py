@@ -79,12 +79,12 @@ async def startup_event():
     client.loop_start()
 
     # Mantém o programa em execução
-    try:
-        loop = asyncio.get_event_loop()
-        loop.run_forever()
-    except KeyboardInterrupt:
-        client.loop_stop()
-        client.disconnect()
+    # try:
+    #     loop = asyncio.get_event_loop()
+    #     loop.run_forever()
+    # except KeyboardInterrupt:
+    #     client.loop_stop()
+    #     client.disconnect()
 
 task2 = create_permanent_unique_task("ext_mqtt2", startup_event)  # type: ignore
 scheduled_tasks.append(task2)
