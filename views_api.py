@@ -143,7 +143,7 @@ async def api_get_mqtt():
 
         # mqtt_thread = threading.Thread(target=mqtt_client_thread)
         # mqtt_thread.start()
-        await asyncio.sleep(5)
+        # await asyncio.sleep(5)
     except Exception as e:
         raise HTTPException(
             status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=str(e)
