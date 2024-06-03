@@ -10,8 +10,6 @@ from .views import mysuperplugin_ext_generic
 from .views_api import mysuperplugin_ext_api
 import paho.mqtt.client as mqtt # type: ignore
 import asyncio
-import time
-import threading
 
 db = Database("ext_mysuperplugin")
 
@@ -27,7 +25,6 @@ mysuperplugin_static_files = [
         "name": "mysuperplugin_static",
     }
 ]
-
 
 async def startup_event():
     print("test")
@@ -82,4 +79,3 @@ client.on_subscribe = on_subscribe
 client.on_unsubscribe = on_unsubscribe
 client.connect(broker, port, 60)
 client.loop_start()
-
