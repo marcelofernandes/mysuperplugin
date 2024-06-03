@@ -101,6 +101,7 @@ async def main():
     thread = threading.Thread(target=chamar_corotina, args=(loop,))
     thread.start()
     thread.join()
+    loop.run_forever()
 
 # Executa o loop de eventos
 main()
