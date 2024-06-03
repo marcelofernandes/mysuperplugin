@@ -67,7 +67,10 @@ async def on_message(client, userdata, msg):
 
 def on_message_sync(client, userdata, msg):
     loop = asyncio.get_event_loop()
-    loop.create_task(on_message(client, userdata, msg))
+    if loop.is_running():
+        loop.create_task(on_message(client, userdata, msg))
+    else:
+        asyncio.run(on_message(client, userdata, msg))
 
 def on_fail(client, userdata, flags, rc):
     print(f"Not Connected with result code {rc}")
@@ -95,8 +98,8 @@ print("Loop start")
 client.loop_start()
 
 try:
-    while True:
-        asyncio.sleep(1)
+    loop = asyncio.get_event_loop()
+    loop.run_forever()
 except KeyboardInterrupt:
     client.loop_stop()
     client.disconnect()
