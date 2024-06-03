@@ -83,6 +83,7 @@ async def api_get_mqtt():
     try:
         def on_subscribe(client, userdata, flags, rc):
             print(f"Subscribed with result code {rc}")
+            return "MQTT Ok"
 
         def on_unsubscribe(client, userdata, mid):
             print(f"Inscrição cancelada no tópico")
@@ -142,7 +143,6 @@ async def api_get_mqtt():
 
         # mqtt_thread = threading.Thread(target=mqtt_client_thread)
         # mqtt_thread.start()
-        return "MQTT Ok"
     except Exception as e:
         raise HTTPException(
             status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=str(e)
