@@ -48,111 +48,57 @@ def mysuperplugin_start():
     task = create_permanent_unique_task("ext_testing", wait_for_paid_invoices)  # type: ignore
     scheduled_tasks.append(task)
 
-async def tarefa_background():
-    def on_subscribe(client, userdata, flags, rc):
-        print(f"Subscribed with result code {rc}")
+broker = "172.21.240.91"  # Endereço do broker Mosquitto
+port = 1883           # Porta padrão do MQTT
+topic = "test/topic"  # Tópico para se inscrever
 
-    def on_unsubscribe(client, userdata, mid):
-        print(f"Inscrição cancelada no tópico")
+def on_connect(client, userdata, flags, rc):
+    if rc == 0:
+        print("Conectado ao Broker!")
+        client.subscribe(topic)
+    else:
+        print(f"Falha na conexão, código de retorno: {rc}")
 
-    def on_connect(client, userdata, flags, rc):
-        print(f"Connected with result code {rc}")
-        if rc == 0:
-            print("Successfully connected to broker")
-        else:
-            print(f"Failed to connect, return code {rc}")
-        client.on_subscribe = on_subscribe
-        client.on_unsubscribe = on_unsubscribe
-        client.subscribe("test/topic")
+# Função de callback para quando uma mensagem for recebida
+async def on_message(client, userdata, msg):
+    print(f"Mensagem recebida no tópico {msg.topic}: {msg.payload.decode()}")
+    await asyncio.sleep(1)  # Simulando uma operação assíncrona
 
-    def on_message(client, userdata, msg):
-        print(f"{msg.topic} {msg.payload.decode()}")
-
-    def on_fail(client, userdata, flags, rc):
-        print(f"Not Connected with result code {rc}")
-
-    def on_log(client, userdata, flags, rc):
-        print(f"Log: {rc}")
-
-    client = mqtt.Client()
-
-    # Atribuir callbacks
-    client.on_connect = on_connect
-    client.on_message = on_message
-    client.on_connect_fail = on_fail
-    client.on_log = on_log
-
-    # Conectar ao broker
-    client.connect("172.21.240.91", 1883, 600)
-
-    print("Loop start")
-    # Iniciar o loop para processar callbacks e manter a conexão aberta
-    client.loop_start()
-    while True:
-        await asyncio.sleep(5)
-
-def chamar_corotina(loop):
-    asyncio.run_coroutine_threadsafe(tarefa_background(), loop)
-
-async def main():
+# Adaptador para chamar funções assíncronas a partir de callbacks síncronos
+def on_message_sync(client, userdata, msg):
     loop = asyncio.get_event_loop()
+    if loop.is_running():
+        loop.create_task(on_message(client, userdata, msg))
+    else:
+        asyncio.run(on_message(client, userdata, msg))
 
-    # Criar e iniciar um thread separado que irá chamar a corotina
-    thread = threading.Thread(target=chamar_corotina, args=(loop,))
-    thread.start()
-    thread.join()
-    loop.run_forever()
+# Função de callback para quando a inscrição for confirmada
+def on_subscribe(client, userdata, mid, granted_qos):
+    print(f"Inscrição confirmada no tópico {topic} com QoS {granted_qos}")
 
-# Executa o loop de eventos
-main()
+# Função de callback para quando a inscrição for cancelada
+def on_unsubscribe(client, userdata, mid):
+    print(f"Inscrição cancelada no tópico {topic}")
 
-# def on_subscribe(client, userdata, flags, rc):
-#     print(f"Subscribed with result code {rc}")
+# Cria um cliente MQTT
+client = mqtt.Client()
 
-# def on_connect(client, userdata, flags, rc):
-#     print(f"Connected with result code {rc}")
-#     if rc == 0:
-#         print("Successfully connected to broker")
-#     else:
-#         print(f"Failed to connect, return code {rc}")
-#     client.on_subscribe = on_subscribe
-#     client.subscribe("test/topic")
+# Atribui as funções de callback
+client.on_connect = on_connect
+client.on_message = on_message_sync
+client.on_subscribe = on_subscribe
+client.on_unsubscribe = on_unsubscribe
 
-# def on_message(client, userdata, msg):
-#     print(f"{msg.topic} {msg.payload.decode()}")
+# Conecta ao Broker
+client.connect(broker, port, 60)
 
-# def on_fail(client, userdata, flags, rc):
-#     print(f"Not Connected with result code {rc}")
+# Inicia o loop de rede para o cliente MQTT
+client.loop_start()
 
-# def on_disconnect(client, userdata, flags, rc):
-#     print(f"Disconected with result code {rc}")
-
-# def mqtt_client_thread():
-#     client = mqtt.Client()
-#     client.on_connect = on_connect
-#     client.on_message = on_message
-#     client.on_fail = on_fail
-#     client.on_disconnect = on_disconnect
-    
-#     try:
-#         client.connect("172.21.240.91", 1883, 60)
-#         client.loop_forever()
-#     except Exception as e:
-#         print(f"Exception occurred: {e}")
-#     client.connect("172.21.240.91", 1883, 600)
-#     client.loop_forever()
-
-# client = mqtt.Client()
-
-# client.on_connect = on_connect
-# client.on_message = on_message
-# client.on_connect_fail = on_fail
-
-# client.connect("172.21.240.91", 1883, 600)
-
-# client.loop_start()
-# time.sleep(20)
-
-# mqtt_thread = threading.Thread(target=mqtt_client_thread)
-# mqtt_thread.start()
-
+# Mantém o programa em execução
+# try:
+#     loop = asyncio.get_event_loop()
+#     loop.run_forever()
+# except KeyboardInterrupt:
+#     client.loop_stop()
+#     client.disconnect()
