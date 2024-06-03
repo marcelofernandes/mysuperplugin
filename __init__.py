@@ -92,11 +92,11 @@ client.connect("172.21.240.91", 1883, 600)
 
 print("Loop start")
 # Iniciar o loop para processar callbacks e manter a conexão aberta
-# client.loop_start()
+client.loop_start()
 
 try:
     loop = asyncio.get_event_loop()
-    client.loop_start()
+    loop.run_forever()
 except KeyboardInterrupt:
     client.loop_stop()
     client.disconnect()
