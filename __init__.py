@@ -30,50 +30,38 @@ mysuperplugin_static_files = [
 
 
 async def startup_event():
-    broker = "172.21.240.91"  # Endereço do broker Mosquitto
-    port = 1883           # Porta padrão do MQTT
-    topic = "test/topic"  # Tópico para se inscrever
-    # Função de callback para quando a conexão for estabelecida
-    def on_connect(client, userdata, flags, rc):
-        if rc == 0:
-            print("Conectado ao Broker!")
-            client.subscribe(topic)
-        else:
-            print(f"Falha na conexão, código de retorno: {rc}")
+    broker = "172.21.240.91"
+    port = 1883
+    topic = "test/topic"
+    # def on_connect(client, userdata, flags, rc):
+    #     if rc == 0:
+    #         print("Conectado ao Broker!")
+    #         client.subscribe(topic)
+    #     else:
+    #         print(f"Falha na conexão, código de retorno: {rc}")
 
-    # Função de callback para quando uma mensagem for recebida
-    async def on_message(client, userdata, msg):
-        print(f"Mensagem recebida no tópico {msg.topic}: {msg.payload.decode()}")
-        await asyncio.sleep(1)  # Simulando uma operação assíncrona
+    # async def on_message(client, userdata, msg):
+    #     print(f"Mensagem recebida no tópico {msg.topic}: {msg.payload.decode()}")
+    #     await asyncio.sleep(1)
 
-    # Adaptador para chamar funções assíncronas a partir de callbacks síncronos
-    def on_message_sync(client, userdata, msg):
-        loop = asyncio.get_event_loop()
-        # Use run_coroutine_threadsafe para agendar a corrotina no loop principal
-        asyncio.run_coroutine_threadsafe(on_message(client, userdata, msg), loop)
+    # def on_message_sync(client, userdata, msg):
+    #     loop = asyncio.get_event_loop()
+    #     asyncio.run_coroutine_threadsafe(on_message(client, userdata, msg), loop)
 
-    # Função de callback para quando a inscrição for confirmada
-    def on_subscribe(client, userdata, mid, granted_qos):
-        print(f"Inscrição confirmada no tópico {topic} com QoS {granted_qos}")
+    # def on_subscribe(client, userdata, mid, granted_qos):
+    #     print(f"Inscrição confirmada no tópico {topic} com QoS {granted_qos}")
 
-    # Função de callback para quando a inscrição for cancelada
-    def on_unsubscribe(client, userdata, mid):
-        print(f"Inscrição cancelada no tópico {topic}")
+    # def on_unsubscribe(client, userdata, mid):
+    #     print(f"Inscrição cancelada no tópico {topic}")
 
-    # Cria um cliente MQTT
-    client = mqtt.Client()
+    # client = mqtt.Client()
 
-    # Atribui as funções de callback
-    client.on_connect = on_connect
-    client.on_message = on_message_sync
-    client.on_subscribe = on_subscribe
-    client.on_unsubscribe = on_unsubscribe
-
-    # Conecta ao Broker
-    client.connect(broker, port, 60)
-
-    # Inicia o loop de rede para o cliente MQTT
-    client.loop_forever()
+    # client.on_connect = on_connect
+    # client.on_message = on_message_sync
+    # client.on_subscribe = on_subscribe
+    # client.on_unsubscribe = on_unsubscribe
+    # client.connect(broker, port, 60)
+    # client.loop_forever()
 
 task2 = create_permanent_unique_task("ext_mqtt2", startup_event)  # type: ignore
 scheduled_tasks.append(task2)
