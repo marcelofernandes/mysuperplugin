@@ -9,6 +9,8 @@ from .tasks import wait_for_paid_invoices
 from .views import mysuperplugin_ext_generic
 from .views_api import mysuperplugin_ext_api
 import paho.mqtt.client as mqtt # type: ignore
+import threading
+import time
 
 db = Database("ext_mysuperplugin")
 
@@ -45,61 +47,57 @@ def mysuperplugin_start():
     task = create_permanent_unique_task("ext_testing", wait_for_paid_invoices)  # type: ignore
     scheduled_tasks.append(task)
 
-def on_subscribe(client, userdata, flags, rc):
-    print(f"Subscribed with result code {rc}")
+def tarefa_background():
+    def on_subscribe(client, userdata, flags, rc):
+        print(f"Subscribed with result code {rc}")
 
-def on_unsubscribe(client, userdata, mid):
-    print(f"Inscrição cancelada no tópico")
+    def on_unsubscribe(client, userdata, mid):
+        print(f"Inscrição cancelada no tópico")
 
-def on_connect(client, userdata, flags, rc):
-    print(f"Connected with result code {rc}")
-    if rc == 0:
-        print("Successfully connected to broker")
-    else:
-        print(f"Failed to connect, return code {rc}")
-    client.on_subscribe = on_subscribe
-    client.on_unsubscribe = on_unsubscribe
-    client.subscribe("test/topic")
+    def on_connect(client, userdata, flags, rc):
+        print(f"Connected with result code {rc}")
+        if rc == 0:
+            print("Successfully connected to broker")
+        else:
+            print(f"Failed to connect, return code {rc}")
+        client.on_subscribe = on_subscribe
+        client.on_unsubscribe = on_unsubscribe
+        client.subscribe("test/topic")
 
-async def on_message(client, userdata, msg):
-    print(f"{msg.topic} {msg.payload.decode()}")
-    await asyncio.sleep(1)
+    def on_message(client, userdata, msg):
+        print(f"{msg.topic} {msg.payload.decode()}")
 
-def on_message_sync(client, userdata, msg):
-    loop = asyncio.get_event_loop()
-    asyncio.run_coroutine_threadsafe(on_message(client, userdata, msg), loop)
+    def on_fail(client, userdata, flags, rc):
+        print(f"Not Connected with result code {rc}")
 
-def on_fail(client, userdata, flags, rc):
-    print(f"Not Connected with result code {rc}")
+    def on_disconnect(client, userdata, flags, rc):
+        print(f"Disconected with result code {rc}")
 
-def on_disconnect(client, userdata, flags, rc):
-    print(f"Disconected with result code {rc}")
+    def on_log(client, userdata, flags, rc):
+        print(f"Log: {rc}")
 
-def on_log(client, userdata, flags, rc):
-    print(f"Log: {rc}")
+    client = mqtt.Client()
 
-client = mqtt.Client()
+    # Atribuir callbacks
+    client.on_connect = on_connect
+    client.on_message = on_message
+    client.on_connect_fail = on_fail
+    client.on_log = on_log
+    client.on_disconnect = on_disconnect
 
-# Atribuir callbacks
-client.on_connect = on_connect
-client.on_message = on_message_sync
-client.on_connect_fail = on_fail
-client.on_log = on_log
-client.on_disconnect = on_disconnect
+    # Conectar ao broker
+    client.connect("172.21.240.91", 1883, 600)
 
-# Conectar ao broker
-client.connect("172.21.240.91", 1883, 600)
+    print("Loop start")
+    # Iniciar o loop para processar callbacks e manter a conexão aberta
+    client.loop_start()
+    while True:
+        time.sleep(5)
 
-print("Loop start")
-# Iniciar o loop para processar callbacks e manter a conexão aberta
-client.loop_start()
-
-try:
-    loop = asyncio.get_event_loop()
-    loop.run_forever()
-except KeyboardInterrupt:
-    client.loop_stop()
-    client.disconnect()
+# Cria e inicia um thread
+thread = threading.Thread(target=tarefa_background)
+thread.daemon = True  # Permite que o programa principal saia mesmo que o thread ainda esteja rodando
+thread.start()
 
 # def on_subscribe(client, userdata, flags, rc):
 #     print(f"Subscribed with result code {rc}")
