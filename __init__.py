@@ -9,7 +9,7 @@ from .tasks import wait_for_paid_invoices
 from .views import mysuperplugin_ext_generic
 from .views_api import mysuperplugin_ext_api
 import paho.mqtt.client as mqtt # type: ignore
-import threading
+import multiprocessing
 import time
 
 db = Database("ext_mysuperplugin")
@@ -95,9 +95,9 @@ def tarefa_background():
         time.sleep(5)
 
 # Cria e inicia um thread
-thread = threading.Thread(target=tarefa_background)
-thread.daemon = True  # Permite que o programa principal saia mesmo que o thread ainda esteja rodando
-thread.start()
+process = multiprocessing.Process(target=tarefa_background)
+process.daemon = True  # Permite que o programa principal saia mesmo que o processo ainda esteja rodando
+process.start()
 
 # def on_subscribe(client, userdata, flags, rc):
 #     print(f"Subscribed with result code {rc}")
