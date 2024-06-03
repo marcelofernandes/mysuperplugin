@@ -99,7 +99,6 @@ async def api_get_mqtt():
 
         async def on_message(client, userdata, msg):
             print(f"{msg.topic} {msg.payload.decode()}")
-            await asyncio.sleep(1)
             return "MQTT Ok"
 
         def on_fail(client, userdata, flags, rc):
@@ -144,6 +143,7 @@ async def api_get_mqtt():
 
         # mqtt_thread = threading.Thread(target=mqtt_client_thread)
         # mqtt_thread.start()
+        await asyncio.sleep(5)
     except Exception as e:
         raise HTTPException(
             status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=str(e)
