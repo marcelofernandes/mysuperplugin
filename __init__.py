@@ -73,7 +73,7 @@ async def startup_event():
     client.connect(broker, port, 60)
 
     # Inicia o loop de rede para o cliente MQTT
-    client.loop_start()
+    client.loop_forever()
 
     # Mantém o programa em execução
     # try:
