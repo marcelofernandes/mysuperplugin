@@ -70,9 +70,6 @@ async def tarefa_background():
     def on_fail(client, userdata, flags, rc):
         print(f"Not Connected with result code {rc}")
 
-    def on_disconnect(self, client, userdata, flags, rc):
-        print(f"Disconected with result code {rc}")
-
     def on_log(client, userdata, flags, rc):
         print(f"Log: {rc}")
 
@@ -83,7 +80,6 @@ async def tarefa_background():
     client.on_message = on_message
     client.on_connect_fail = on_fail
     client.on_log = on_log
-    client.on_disconnect = on_disconnect
 
     # Conectar ao broker
     client.connect("172.21.240.91", 1883, 600)
