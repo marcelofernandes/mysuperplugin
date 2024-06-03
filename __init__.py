@@ -9,7 +9,7 @@ from .tasks import wait_for_paid_invoices
 from .views import mysuperplugin_ext_generic
 from .views_api import mysuperplugin_ext_api
 import paho.mqtt.client as mqtt # type: ignore
-import multiprocessing
+import asyncio
 import time
 
 db = Database("ext_mysuperplugin")
@@ -47,7 +47,7 @@ def mysuperplugin_start():
     task = create_permanent_unique_task("ext_testing", wait_for_paid_invoices)  # type: ignore
     scheduled_tasks.append(task)
 
-def tarefa_background():
+async def tarefa_background():
     def on_subscribe(client, userdata, flags, rc):
         print(f"Subscribed with result code {rc}")
 
@@ -92,12 +92,19 @@ def tarefa_background():
     # Iniciar o loop para processar callbacks e manter a conexão aberta
     client.loop_start()
     while True:
-        time.sleep(5)
+        await asyncio.sleep(5)
 
-# Cria e inicia um thread
-process = multiprocessing.Process(target=tarefa_background)
-process.daemon = True  # Permite que o programa principal saia mesmo que o processo ainda esteja rodando
-process.start()
+async def main():
+    # Inicia a tarefa em background
+    asyncio.create_task(tarefa_background())
+    
+    # Código principal continua rodando
+    print("Código principal está rodando")
+    await asyncio.sleep(20)
+    print("Código principal terminou")
+
+# Executa o loop de eventos
+asyncio.run(main())
 
 # def on_subscribe(client, userdata, flags, rc):
 #     print(f"Subscribed with result code {rc}")
