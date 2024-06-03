@@ -64,6 +64,10 @@ def on_connect(client, userdata, flags, rc):
 async def on_message(client, userdata, msg):
     print(f"{msg.topic} {msg.payload.decode()}")
 
+def on_message_sync(client, userdata, msg):
+    loop = asyncio.get_event_loop()
+    loop.create_task(on_message(client, userdata, msg))
+
 def on_fail(client, userdata, flags, rc):
     print(f"Not Connected with result code {rc}")
 
@@ -77,7 +81,7 @@ client = mqtt.Client()
 
 # Atribuir callbacks
 client.on_connect = on_connect
-client.on_message = on_message
+client.on_message = on_message_sync
 client.on_connect_fail = on_fail
 client.on_log = on_log
 client.on_disconnect = on_disconnect
