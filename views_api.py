@@ -84,6 +84,9 @@ async def api_get_mqtt():
         def on_subscribe(client, userdata, flags, rc):
             print(f"Subscribed with result code {rc}")
 
+        def on_unsubscribe(client, userdata, mid):
+            print(f"Inscrição cancelada no tópico")
+
         def on_connect(client, userdata, flags, rc):
             print(f"Connected with result code {rc}")
             if rc == 0:
@@ -91,6 +94,7 @@ async def api_get_mqtt():
             else:
                 print(f"Failed to connect, return code {rc}")
             client.on_subscribe = on_subscribe
+            client.on_unsubscribe = on_unsubscribe
             client.subscribe("test/topic")
 
         def on_message(client, userdata, msg):
@@ -128,6 +132,7 @@ async def api_get_mqtt():
         client.on_message = on_message
         client.on_connect_fail = on_fail
         client.on_log = on_log
+        client.on_disconnect = on_disconnect
 
         # Conectar ao broker
         client.connect("172.21.240.91", 1883, 600)
@@ -137,10 +142,6 @@ async def api_get_mqtt():
 
         # mqtt_thread = threading.Thread(target=mqtt_client_thread)
         # mqtt_thread.start()
-        while True:
-            print("Doing main application tasks...")
-            time.sleep(5)
-        await asyncio.sleep(20)
         return "MQTT Ok"
     except Exception as e:
         raise HTTPException(

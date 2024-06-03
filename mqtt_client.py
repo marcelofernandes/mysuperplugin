@@ -16,6 +16,13 @@ class MQTTClient:
     def on_message(self, client, userdata, msg):
         print(f"{msg.topic} {msg.payload.decode()}")
 
+    def on_subscribe(client, userdata, mid, granted_qos, teste):
+        print("Inscrição confirmada no tópico")
+
+    # Função de callback para quando a inscrição for cancelada
+    def on_unsubscribe(client, userdata, mid):
+        print(f"Inscrição cancelada no tópico")
+
     async def connect(self):
         self.client.connect("172.21.240.91", 1883, 60)
         self.client.loop_start()
