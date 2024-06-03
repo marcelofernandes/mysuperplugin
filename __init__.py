@@ -63,6 +63,7 @@ def on_connect(client, userdata, flags, rc):
 
 async def on_message(client, userdata, msg):
     print(f"{msg.topic} {msg.payload.decode()}")
+    await asyncio.sleep(1)
 
 def on_message_sync(client, userdata, msg):
     loop = asyncio.get_event_loop()
