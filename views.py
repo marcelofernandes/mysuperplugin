@@ -6,6 +6,23 @@ from lnbits.helpers import template_renderer
 
 mysuperplugin_ext_generic = APIRouter(tags=["mysuperplugin"])
 
+import paho.mqtt.client as mqtt # type: ignore
+
+# Função de callback quando uma mensagem é recebida
+def on_message(client, userdata, msg):
+    print(f"Mensagem recebida: {msg.topic} {msg.payload.decode()}")
+
+# Configura o cliente MQTT
+mqtt_client = mqtt.Client()
+mqtt_client.on_message = on_message
+
+# Conecta ao broker MQTT
+mqtt_client.connect("172.21.240.91", 1883, 60)
+mqtt_client.loop_start()
+
+# Subscreve em um tópico
+mqtt_client.subscribe("test/topic")
+
 
 @mysuperplugin_ext_generic.get(
     "/", description="Example generic endpoint", response_class=HTMLResponse
