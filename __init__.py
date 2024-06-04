@@ -49,47 +49,35 @@ broker = "172.21.240.91"
 port = 1883
 topic = "test/topic"
 
-# Função de callback para quando a conexão for estabelecida
+# Callback para quando o cliente se conecta ao broker
 def on_connect(client, userdata, flags, rc):
-    if rc == 0:
-        print("Conectado ao Broker!")
-        client.subscribe(topic)
-    else:
-        print(f"Falha na conexão, código de retorno: {rc}")
+    print("Conectado com código de retorno:", rc)
+    client.subscribe("meu/topico")
 
-# Função de callback para quando uma mensagem for recebida
-async def on_message(client, userdata, msg):
-    print(f"Mensagem recebida no tópico {msg.topic}: {msg.payload.decode()}")
-    await asyncio.sleep(1)  # Simulando uma operação assíncrona
+# Callback para quando uma mensagem é recebida do broker
+def on_message(client, userdata, msg):
+    print("Mensagem recebida no tópico:", msg.topic)
+    print("Payload:", msg.payload.decode())
 
-# Adaptador para chamar funções assíncronas a partir de callbacks síncronos
-def on_message_sync(client, userdata, msg):
-    # Aqui nós garantimos que estamos usando o loop de eventos principal
-    loop = asyncio.get_running_loop()
-    asyncio.run_coroutine_threadsafe(on_message(client, userdata, msg), loop)
-
-# Função de callback para quando a inscrição for confirmada
-def on_subscribe(client, userdata, mid, granted_qos):
-    print(f"Inscrição confirmada no tópico {topic} com QoS {granted_qos}")
-
-# Função de callback para quando a inscrição for cancelada
-def on_unsubscribe(client, userdata, mid):
-    print(f"Inscrição cancelada no tópico {topic}")
-
-# Cria um cliente MQTT
+# Criação de um cliente MQTT
 client = mqtt.Client()
 
-# Atribui as funções de callback
+# Configuração dos callbacks
 client.on_connect = on_connect
-client.on_message = on_message_sync
-client.on_subscribe = on_subscribe
-client.on_unsubscribe = on_unsubscribe
+client.on_message = on_message
 
-# Conecta ao Broker
-client.connect(broker, port, 60)
+# Função para conectar e iniciar o loop MQTT
+async def connect_and_loop():
+    client.connect(broker_address, port)
+    client.loop_start()
 
-# Inicia o loop de rede em background
-client.loop_start()
+# Função principal assíncrona
+async def main():
+    await connect_and_loop()
+
+# Execução do loop principal asyncio
+if __name__ == "__main__":
+    asyncio.run(main())
 # try:
 #     loop = asyncio.get_event_loop()
 #     loop.run_forever()
