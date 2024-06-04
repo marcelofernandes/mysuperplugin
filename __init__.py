@@ -10,33 +10,6 @@ from .views import mysuperplugin_ext_generic
 from .views_api import mysuperplugin_ext_api
 import paho.mqtt.client as mqtt # type: ignore
 import asyncio
-from asyncio_mqtt import Client # type: ignore
-
-broker_address = '172.21.240.91'
-port = 1883
-topic = 'lnbits/example'
-
-async def main():
-    async with Client(broker_address, port) as client:
-        # Subscreve no tópico
-        await client.subscribe(topic)
-        print(f'Subscrito no tópico {topic}')
-
-        async def publish_message():
-            while True:
-                await client.publish(topic, 'Hello from asyncio_mqtt!')
-                print('Mensagem publicada')
-                await asyncio.sleep(5)  # Publicar a cada 5 segundos
-
-        async def message_handler():
-            async with client.filtered_messages(topic) as messages:
-                async for message in messages:
-                    print(f'Mensagem recebida: {message.payload.decode()}')
-
-        # Executa as tarefas de publicação e recebimento de mensagens simultaneamente
-        await asyncio.gather(publish_message(), message_handler())
-
-asyncio.run(main())
 
 db = Database("ext_mysuperplugin")
 
