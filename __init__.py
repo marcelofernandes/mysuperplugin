@@ -68,7 +68,7 @@ client.on_message = on_message
 
 # Função para conectar e iniciar o loop MQTT
 async def connect_and_loop():
-    client.connect(broker_address, port)
+    client.connect(broker, port, 5)
     client.loop_start()
 
 # Função principal assíncrona
