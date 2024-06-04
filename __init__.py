@@ -76,8 +76,9 @@ async def main():
     await connect_and_loop()
 
 # Execução do loop principal asyncio
-if __name__ == "__main__":
-    asyncio.run(main())
+# if __name__ == "__main__":
+#     asyncio.run(main())
+asyncio.run(main())
 # try:
 #     loop = asyncio.get_event_loop()
 #     loop.run_forever()
