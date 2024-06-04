@@ -15,7 +15,7 @@ port = 1883
 # Configuração do cliente MQTT
 mqtt_client = Client(broker_address, port)
 loop = asyncio.get_event_loop()
-loop.create_task(connect_and_subscribe())
+loop.create_task(connect_and_subscribe(mqtt_client))
 
 @mysuperplugin_ext_generic.get(
     "/", description="Example generic endpoint", response_class=HTMLResponse
