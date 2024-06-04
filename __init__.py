@@ -9,7 +9,6 @@ from .tasks import wait_for_paid_invoices
 from .views import mysuperplugin_ext_generic
 from .views_api import mysuperplugin_ext_api
 import paho.mqtt.client as mqtt # type: ignore
-import asyncio
 
 db = Database("ext_mysuperplugin")
 
