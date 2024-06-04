@@ -46,51 +46,51 @@ def mysuperplugin_start():
     scheduled_tasks.append(task)
 
 
-# broker = "172.21.240.91"
-# port = 1883
-# topic = "test/topic"
+broker = "172.21.240.91"
+port = 1883
+topic = "test/topic"
 
-# # Função de callback para quando a conexão for estabelecida
-# def on_connect(client, userdata, flags, rc):
-#     if rc == 0:
-#         print("Conectado ao Broker!")
-#         client.subscribe(topic)
-#     else:
-#         print(f"Falha na conexão, código de retorno: {rc}")
+# Função de callback para quando a conexão for estabelecida
+def on_connect(client, userdata, flags, rc):
+    if rc == 0:
+        print("Conectado ao Broker!")
+        client.subscribe(topic)
+    else:
+        print(f"Falha na conexão, código de retorno: {rc}")
 
-# # Função de callback para quando uma mensagem for recebida
-# async def on_message(client, userdata, msg):
-#     print(f"Mensagem recebida no tópico {msg.topic}: {msg.payload.decode()}")
-#     await asyncio.sleep(1)  # Simulando uma operação assíncrona
+# Função de callback para quando uma mensagem for recebida
+async def on_message(client, userdata, msg):
+    print(f"Mensagem recebida no tópico {msg.topic}: {msg.payload.decode()}")
+    await asyncio.sleep(1)  # Simulando uma operação assíncrona
 
-# # Adaptador para chamar funções assíncronas a partir de callbacks síncronos
-# def on_message_sync(client, userdata, msg):
-#     # Aqui nós garantimos que estamos usando o loop de eventos principal
-#     loop = asyncio.get_running_loop()
-#     asyncio.run_coroutine_threadsafe(on_message(client, userdata, msg), loop)
+# Adaptador para chamar funções assíncronas a partir de callbacks síncronos
+def on_message_sync(client, userdata, msg):
+    # Aqui nós garantimos que estamos usando o loop de eventos principal
+    loop = asyncio.get_running_loop()
+    asyncio.run_coroutine_threadsafe(on_message(client, userdata, msg), loop)
 
-# # Função de callback para quando a inscrição for confirmada
-# def on_subscribe(client, userdata, mid, granted_qos):
-#     print(f"Inscrição confirmada no tópico {topic} com QoS {granted_qos}")
+# Função de callback para quando a inscrição for confirmada
+def on_subscribe(client, userdata, mid, granted_qos):
+    print(f"Inscrição confirmada no tópico {topic} com QoS {granted_qos}")
 
-# # Função de callback para quando a inscrição for cancelada
-# def on_unsubscribe(client, userdata, mid):
-#     print(f"Inscrição cancelada no tópico {topic}")
+# Função de callback para quando a inscrição for cancelada
+def on_unsubscribe(client, userdata, mid):
+    print(f"Inscrição cancelada no tópico {topic}")
 
-# # Cria um cliente MQTT
-# client = mqtt.Client()
+# Cria um cliente MQTT
+client = mqtt.Client()
 
-# # Atribui as funções de callback
-# client.on_connect = on_connect
-# client.on_message = on_message_sync
-# client.on_subscribe = on_subscribe
-# client.on_unsubscribe = on_unsubscribe
+# Atribui as funções de callback
+client.on_connect = on_connect
+client.on_message = on_message_sync
+client.on_subscribe = on_subscribe
+client.on_unsubscribe = on_unsubscribe
 
-# # Conecta ao Broker
-# client.connect(broker, port, 60)
+# Conecta ao Broker
+client.connect(broker, port, 60)
 
-# # Inicia o loop de rede em background
-# client.loop_start()
+# Inicia o loop de rede em background
+client.loop_start()
 # try:
 #     loop = asyncio.get_event_loop()
 #     loop.run_forever()
