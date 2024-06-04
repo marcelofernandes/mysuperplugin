@@ -1,37 +1,16 @@
-import paho.mqtt.client as mqtt
 import asyncio
+from asyncio_mqtt import Client, MqttError # type: ignore
 
-class MQTTClient:
-    def __init__(self, broker_url, broker_port):
-        self.client = mqtt.Client()
-        self.broker_url = broker_url
-        self.broker_port = broker_port
-        self.client.on_connect = self.on_connect
-        self.client.on_message = self.on_message
+broker_address = '172.21.240.91'
+port = 1883
+topic = 'lnbits/example'
 
-    def on_connect(self, client, userdata, flags, rc):
-        print(f"Connected with result code {rc}")
-        client.subscribe("test/topic")
+async def connect_and_subscribe():
+    async with Client(broker_address, port) as client:
+        await client.subscribe(topic)
+        print(f'Subscrito no tópico {topic}')
+        
+        async with client.filtered_messages(topic) as messages:
+            async for message in messages:
+                print(f'Mensagem recebida: {message.payload.decode()}')
 
-    def on_message(self, client, userdata, msg):
-        print(f"{msg.topic} {msg.payload.decode()}")
-
-    def on_subscribe(client, userdata, mid, granted_qos, teste):
-        print("Inscrição confirmada no tópico")
-
-    # Função de callback para quando a inscrição for cancelada
-    def on_unsubscribe(client, userdata, mid):
-        print(f"Inscrição cancelada no tópico")
-
-    async def connect(self):
-        self.client.connect("172.21.240.91", 1883, 60)
-        self.client.loop_start()
-
-    def publish(self, topic, payload):
-        self.client.publish(topic, payload)
-
-# Configuração do cliente MQTT
-broker_address = "172.21.240.91"  # Substitua pelo endereço do seu broker
-port = 1883                   # Substitua pela porta usada pelo seu broker
-
-mqtt_client = MQTTClient(broker_address, port)
