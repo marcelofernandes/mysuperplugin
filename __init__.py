@@ -59,9 +59,16 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     print(f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}")
 
+def on_message(client, userdata, msg):
+    print(f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}")
+
+def on_log(client, userdata, level, buf):
+    print(f"Log: {buf}")
+
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
+client.on_log = on_log
 
 client.connect(broker, 1883, 60)
 
