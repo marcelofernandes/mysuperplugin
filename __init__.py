@@ -51,6 +51,9 @@ broker = "172.21.240.91"
 port = 1883
 topic = "test/topic"
 
+def on_subscribe(client, userdata, flags, rc):
+    print("Subscribed!")
+
 # Configuração do Cliente MQTT
 def on_connect(client, userdata, flags, rc):
     print("Conectado com código de resultado: " + str(rc))
@@ -76,6 +79,7 @@ async def mqtt_loop(queue):
     client = mqtt.Client(userdata=queue)
     client.on_connect = on_connect
     client.on_message = on_message
+    client.on_subscribe = on_subscribe
 
     client.connect(broker, port, 60)
     client.loop_start()
