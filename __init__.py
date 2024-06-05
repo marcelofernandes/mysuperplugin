@@ -54,36 +54,47 @@ topic = "test/topic"
 # Configuração do Cliente MQTT
 def on_connect(client, userdata, flags, rc):
     print("Conectado com código de resultado: " + str(rc))
-    client.subscribe("test/topic")
+    client.subscribe("topico/teste")
 
 def on_message(client, userdata, msg):
     mensagem = msg.payload.decode()
     print(f"Mensagem recebida: {mensagem} no tópico {msg.topic}")
-    # Aqui você pode integrar com os serviços do LNbits
-    asyncio.run_coroutine_threadsafe(process_message(mensagem), asyncio.get_event_loop())
+    # Colocar a mensagem na fila
+    userdata.put_nowait(mensagem)
 
 # Coroutine para processar a mensagem
-async def process_message(mensagem):
-    await asyncio.sleep(5)
+async def process_message(queue):
+    while True:
+        mensagem = await queue.get()
+        if mensagem is None:
+            break
+        # Exemplo de integração com os serviços do LNbits
+        await asyncio.sleep(10)
 
 # Função para rodar o loop do MQTT
-async def mqtt_loop():
-    client = mqtt.Client()
+async def mqtt_loop(queue):
+    client = mqtt.Client(userdata=queue)
     client.on_connect = on_connect
     client.on_message = on_message
 
-    client.connect(broker, port, 5)
+    client.connect("broker.hivemq.com", 1883, 60)
     client.loop_start()
 
     while True:
         await asyncio.sleep(1)  # Manter o loop rodando
 
 # Função que retorna a coroutine mqtt_loop
-async def start_mqtt_loop():
-    await mqtt_loop()
+def start_mqtt_loop(queue):
+    return mqtt_loop(queue)
 
-# Criar a tarefa permanente
-create_permanent_task(start_mqtt_loop)
+# Função principal para inicializar as tarefas
+async def main():
+    queue = asyncio.Queue()
+    create_permanent_task(lambda: start_mqtt_loop(queue))
+    await process_message(queue)
+
+# Criar a tarefa principal
+create_permanent_task(main)
 
 # Execução do loop principal asyncio
 # if __name__ == "__main__":
