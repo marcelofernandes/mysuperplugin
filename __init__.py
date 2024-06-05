@@ -76,7 +76,7 @@ async def process_message(queue):
 
 # Função para rodar o loop do MQTT
 async def mqtt_loop(queue):
-    client = mqtt.Client(userdata=queue)
+    client = mqtt.Client(client_id="123121213",userdata=queue)
     client.on_connect = on_connect
     client.on_message = on_message
     client.on_subscribe = on_subscribe
