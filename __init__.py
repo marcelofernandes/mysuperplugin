@@ -9,7 +9,7 @@ from .tasks import wait_for_paid_invoices
 from .views import mysuperplugin_ext_generic
 from .views_api import mysuperplugin_ext_api
 import paho.mqtt.client as mqtt # type: ignore
-import threading
+from lnbits.tasks import create_permanent_task # type: ignore
 
 db = Database("ext_mysuperplugin")
 
@@ -50,61 +50,42 @@ broker = "172.21.240.91"
 port = 1883
 topic = "test/topic"
 
-# Callback para quando o cliente se conecta ao broker
+# Configuração do Cliente MQTT
 def on_connect(client, userdata, flags, rc):
-    print("Conectado com código de retorno:", rc)
-    client.subscribe("test/topic")
+    print("Conectado com código de resultado: " + str(rc))
+    client.subscribe("topico/teste")
 
-# Callback para quando uma mensagem é recebida do broker
 def on_message(client, userdata, msg):
-    print("Mensagem recebida no tópico:", msg.topic)
-    print("Payload:", msg.payload.decode())
+    mensagem = msg.payload.decode()
+    print(f"Mensagem recebida: {mensagem} no tópico {msg.topic}")
+    # Aqui você pode integrar com os serviços do LNbits
+    # asyncio.run_coroutine_threadsafe(process_message(mensagem), asyncio.get_event_loop())
 
-# Criação de um cliente MQTT
-client = mqtt.Client()
+# Coroutine para processar a mensagem
+# async def process_message(mensagem):
+#     # Exemplo de integração com os serviços do LNbits
+#     payment = Payment(
+#         amount=1000,  # Exemplo de valor
+#         memo=mensagem,
+#         wallet_id="your_wallet_id",  # Substitua pelo ID da carteira do LNbits
+#         webhook=None
+#     )
+#     await create_payment(payment)
 
-# Configuração dos callbacks
-client.on_connect = on_connect
-client.on_message = on_message
-
-# Função assíncrona para conectar e integrar o loop MQTT ao loop asyncio
+# Função para rodar o loop do MQTT
 async def mqtt_loop():
-    client.connect(broker, port)
-    client.loop_forever
-    # try:
-    #     while True:
-    #         await asyncio.sleep(1)
-    # except asyncio.CancelledError:
-    #     client.loop_stop()
-    #     client.disconnect()
+    client = mqtt.Client()
+    client.on_connect = on_connect
+    client.on_message = on_message
 
-# Função principal assíncrona para realizar outras tarefas
-async def main():
-    # Iniciar o loop MQTT de forma assíncrona
-    mqtt_task = asyncio.create_task(mqtt_loop())
+    client.connect("broker.hivemq.com", 1883, 60)
+    client.loop_start()
 
-    # Executa outras tarefas assíncronas aqui
-    try:
-        while True:
-            print("Executando outras tarefas assíncronas...")
-            await asyncio.sleep(5)
-    except KeyboardInterrupt:
-        print("Interrompido pelo usuário")
-        mqtt_task.cancel()
-        await mqtt_task
+    while True:
+        await asyncio.sleep(1)  # Manter o loop rodando
 
-# Execução do loop principal asyncio
-try:
-    loop = asyncio.get_running_loop()
-except RuntimeError:  # Nenhum loop em execução
-    loop = None
-
-if loop and loop.is_running():
-    # Se o loop já estiver em execução, agendar a coroutine
-    asyncio.create_task(main())
-else:
-    # Se nenhum loop estiver em execução, iniciar o loop e executar a coroutine
-    asyncio.run(main())
+# Criar a tarefa permanente
+create_permanent_task(mqtt_loop())
 # Execução do loop principal asyncio
 # if __name__ == "__main__":
 #     asyncio.run(main())
