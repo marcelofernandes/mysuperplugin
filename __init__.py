@@ -60,6 +60,7 @@ def on_message(client, userdata, msg):
     print("Mensagem recebida no tópico:", msg.topic)
     print("Payload:", msg.payload.decode())
 
+# Criação de um cliente MQTT
 client = mqtt.Client()
 
 # Configuração dos callbacks
@@ -68,17 +69,20 @@ client.on_message = on_message
 
 # Função assíncrona para conectar e integrar o loop MQTT ao loop asyncio
 async def mqtt_loop():
-    client.connect(broker_address, port)
+    client.connect(broker, port)
+    client.loop_start()  # Inicia o loop MQTT em segundo plano
 
-    # Integração do loop de eventos MQTT com asyncio
-    while True:
-        client.loop(timeout=1.0)
-        await asyncio.sleep(0.1)
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except asyncio.CancelledError:
+        client.loop_stop()
+        client.disconnect()
 
 # Função principal assíncrona para realizar outras tarefas
 async def main():
     # Iniciar o loop MQTT de forma assíncrona
-    asyncio.create_task(mqtt_loop())
+    mqtt_task = asyncio.create_task(mqtt_loop())
 
     # Executa outras tarefas assíncronas aqui
     try:
@@ -87,11 +91,12 @@ async def main():
             await asyncio.sleep(5)
     except KeyboardInterrupt:
         print("Interrompido pelo usuário")
-        client.loop_stop()
-        client.disconnect()
+        mqtt_task.cancel()
+        await mqtt_task
 
 # Execução do loop principal asyncio
-asyncio.run(main())
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())
 
 # Execução do loop principal asyncio
 # if __name__ == "__main__":
