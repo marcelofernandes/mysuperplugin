@@ -70,14 +70,13 @@ client.on_message = on_message
 # Função assíncrona para conectar e integrar o loop MQTT ao loop asyncio
 async def mqtt_loop():
     client.connect(broker, port)
-    client.loop_start()  # Inicia o loop MQTT em segundo plano
-
-    try:
-        while True:
-            await asyncio.sleep(1)
-    except asyncio.CancelledError:
-        client.loop_stop()
-        client.disconnect()
+    client.loop_forever
+    # try:
+    #     while True:
+    #         await asyncio.sleep(1)
+    # except asyncio.CancelledError:
+    #     client.loop_stop()
+    #     client.disconnect()
 
 # Função principal assíncrona para realizar outras tarefas
 async def main():
@@ -95,8 +94,8 @@ async def main():
         await mqtt_task
 
 # Execução do loop principal asyncio
-loop = asyncio.get_running_loop()
-loop.call_soon_threadsafe(main())
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())
 # Execução do loop principal asyncio
 # if __name__ == "__main__":
 #     asyncio.run(main())
