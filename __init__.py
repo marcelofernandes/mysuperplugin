@@ -10,6 +10,7 @@ from .views import mysuperplugin_ext_generic
 from .views_api import mysuperplugin_ext_api
 import paho.mqtt.client as mqtt # type: ignore
 from lnbits.tasks import create_permanent_task # type: ignore
+from typing import Callable
 
 db = Database("ext_mysuperplugin")
 
@@ -84,7 +85,7 @@ async def mqtt_loop():
     while True:
         await asyncio.sleep(1)  # Manter o loop rodando
 
-def start_mqtt_loop():
+def start_mqtt_loop() -> Callable:
     return mqtt_loop()
 
 # Criar a tarefa permanente
