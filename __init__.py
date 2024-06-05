@@ -17,11 +17,19 @@ async def print_message():
 
 # Função principal para inicializar a tarefa de impressão
 async def main():
-    # Iniciar a tarefa de impressão em um loop de eventos asyncio separado
-    asyncio.create_task(print_message())
+    # Obter o loop de eventos asyncio em execução
+    loop = asyncio.get_running_loop()
 
-# Executar a função principal
-asyncio.run(main())
+    # Iniciar a tarefa de impressão no loop de eventos asyncio existente
+    loop.create_task(print_message())
+
+# Verificar se já estamos dentro de um loop de eventos asyncio
+if asyncio.get_event_loop().is_running():
+    # Se estiver, executar a função principal diretamente
+    asyncio.run(main())
+else:
+    # Se não estiver, usar asyncio.run() para iniciar um novo loop de eventos asyncio e executar a função principal
+    asyncio.run(main())
 
 
 db = Database("ext_mysuperplugin")
