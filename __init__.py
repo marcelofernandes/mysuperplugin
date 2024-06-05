@@ -54,42 +54,37 @@ topic = "test/topic"
 # Configuração do Cliente MQTT
 def on_connect(client, userdata, flags, rc):
     print("Conectado com código de resultado: " + str(rc))
-    client.subscribe("topico/teste")
+    client.subscribe("test/topic")
 
 def on_message(client, userdata, msg):
     mensagem = msg.payload.decode()
     print(f"Mensagem recebida: {mensagem} no tópico {msg.topic}")
     # Aqui você pode integrar com os serviços do LNbits
-    # asyncio.run_coroutine_threadsafe(process_message(mensagem), asyncio.get_event_loop())
+    asyncio.run_coroutine_threadsafe(process_message(mensagem), asyncio.get_event_loop())
 
 # Coroutine para processar a mensagem
-# async def process_message(mensagem):
-#     # Exemplo de integração com os serviços do LNbits
-#     payment = Payment(
-#         amount=1000,  # Exemplo de valor
-#         memo=mensagem,
-#         wallet_id="your_wallet_id",  # Substitua pelo ID da carteira do LNbits
-#         webhook=None
-#     )
-#     await create_payment(payment)
+async def process_message(mensagem):
+    await asyncio.sleep(5)
 
 # Função para rodar o loop do MQTT
-async def mqtt_loop() -> Callable:
+async def mqtt_loop():
     client = mqtt.Client()
     client.on_connect = on_connect
     client.on_message = on_message
 
-    client.connect(broker, port, 10)
+    client.connect(broker, port, 5)
     client.loop_start()
 
     while True:
         await asyncio.sleep(1)  # Manter o loop rodando
 
-def start_mqtt_loop() -> Callable:
-    return mqtt_loop()
+# Função que retorna a coroutine mqtt_loop
+async def start_mqtt_loop():
+    await mqtt_loop()
 
 # Criar a tarefa permanente
-create_permanent_task(start_mqtt_loop())
+create_permanent_task(start_mqtt_loop)
+
 # Execução do loop principal asyncio
 # if __name__ == "__main__":
 #     asyncio.run(main())
