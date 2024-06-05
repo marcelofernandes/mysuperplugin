@@ -51,33 +51,30 @@ broker = "172.21.240.91"
 port = 1883
 topic = "test/topic"
 
-# Configuração do Cliente MQTT
-def on_connect(client, userdata, flags, rc):
+async def on_connect(client, userdata, flags, rc):
     print("Conectado com código de resultado: " + str(rc))
-    client.subscribe(topic)
+    client.subscribe("topico/teste")
 
-def on_message(client, userdata, msg):
+async def on_message(client, userdata, msg):
     print(f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}")
-
-def on_message(client, userdata, msg):
-    print(f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}")
-
-def on_log(client, userdata, level, buf):
-    print(f"Log: {buf}")
 
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
-client.on_log = on_log
 
 client.connect(broker, 1883, 60)
+async def mqtt_loop():
+    client.loop_start()
+    while True:
+        await asyncio.sleep(1)
 
-def mqtt_loop():
-    client.loop_forever()
+async def main():
+    await asyncio.gather(
+        mqtt_loop()
+    )
 
-mqtt_thread = threading.Thread(target=mqtt_loop)
-mqtt_thread.start()
-
+# Execute o loop de eventos asyncio
+asyncio.run(main())
 # Execução do loop principal asyncio
 # if __name__ == "__main__":
 #     asyncio.run(main())
