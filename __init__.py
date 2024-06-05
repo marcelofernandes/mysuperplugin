@@ -60,32 +60,38 @@ def on_message(client, userdata, msg):
     print("Mensagem recebida no tópico:", msg.topic)
     print("Payload:", msg.payload.decode())
 
-# Função para rodar o loop MQTT em um thread separado
-def start_mqtt_loop(client):
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.run_until_complete(mqtt_loop(client))
-    loop.run_forever()
-
-# Função assíncrona para conectar e iniciar o loop MQTT
-async def mqtt_loop(client):
-    client.connect(broker_address, port)
-    client.loop_start()
-
-# Configuração do broker MQTT
-broker_address = "mqtt.eclipse.org"
-port = 1883
-
-# Criação de um cliente MQTT
 client = mqtt.Client()
 
 # Configuração dos callbacks
 client.on_connect = on_connect
 client.on_message = on_message
 
-# Iniciar o loop MQTT em um thread separado
-mqtt_thread = threading.Thread(target=start_mqtt_loop, args=(client,))
-mqtt_thread.start()
+# Função assíncrona para conectar e integrar o loop MQTT ao loop asyncio
+async def mqtt_loop():
+    client.connect(broker_address, port)
+
+    # Integração do loop de eventos MQTT com asyncio
+    while True:
+        client.loop(timeout=1.0)
+        await asyncio.sleep(0.1)
+
+# Função principal assíncrona para realizar outras tarefas
+async def main():
+    # Iniciar o loop MQTT de forma assíncrona
+    asyncio.create_task(mqtt_loop())
+
+    # Executa outras tarefas assíncronas aqui
+    try:
+        while True:
+            print("Executando outras tarefas assíncronas...")
+            await asyncio.sleep(5)
+    except KeyboardInterrupt:
+        print("Interrompido pelo usuário")
+        client.loop_stop()
+        client.disconnect()
+
+# Execução do loop principal asyncio
+asyncio.run(main())
 
 # Execução do loop principal asyncio
 # if __name__ == "__main__":
