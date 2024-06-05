@@ -95,9 +95,8 @@ async def main():
         await mqtt_task
 
 # Execução do loop principal asyncio
-loop = asyncio.get_event_loop()
+loop = asyncio.new_event_loop()
 loop.run_until_complete(main())
-
 # Execução do loop principal asyncio
 # if __name__ == "__main__":
 #     asyncio.run(main())
