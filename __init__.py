@@ -96,7 +96,7 @@ async def main():
 
 # Execução do loop principal asyncio
 loop = asyncio.get_running_loop()
-loop.create_task(main())
+loop.call_soon_threadsafe(main())
 # Execução do loop principal asyncio
 # if __name__ == "__main__":
 #     asyncio.run(main())
