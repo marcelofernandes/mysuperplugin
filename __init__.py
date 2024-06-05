@@ -12,15 +12,18 @@ import paho.mqtt.client as mqtt # type: ignore
 import threading
 import time
 
-# Função que será executada pela thread
-def print_message():
+async def print_message():
     while True:
         print("Mensagem impressa a cada 3 segundos")
-        time.sleep(3)
+        await asyncio.sleep(3)
 
-# Criar e iniciar a thread
-thread = threading.Thread(target=print_message, daemon=True)
-thread.start()
+# Função principal para inicializar a tarefa de impressão
+async def main():
+    # Iniciar a tarefa de impressão em um loop de eventos asyncio separado
+    asyncio.create_task(print_message())
+
+# Iniciar o loop de eventos asyncio e executar a função principal
+asyncio.run(main())
 
 
 db = Database("ext_mysuperplugin")
