@@ -78,14 +78,17 @@ async def mqtt_loop():
     client.on_connect = on_connect
     client.on_message = on_message
 
-    client.connect("broker.hivemq.com", 1883, 60)
+    client.connect(broker, port, 10)
     client.loop_start()
 
     while True:
         await asyncio.sleep(1)  # Manter o loop rodando
 
+def start_mqtt_loop():
+    return mqtt_loop()
+
 # Criar a tarefa permanente
-create_permanent_task(mqtt_loop())
+create_permanent_task(start_mqtt_loop())
 # Execução do loop principal asyncio
 # if __name__ == "__main__":
 #     asyncio.run(main())
