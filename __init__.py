@@ -77,7 +77,7 @@ async def mqtt_loop(queue):
     client.on_connect = on_connect
     client.on_message = on_message
 
-    client.connect("broker.hivemq.com", 1883, 60)
+    client.connect(broker, port, 60)
     client.loop_start()
 
     while True:
