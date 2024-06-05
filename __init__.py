@@ -95,6 +95,7 @@ async def main():
 
 # Execução do loop principal asyncio
 loop = asyncio.get_event_loop()
+print(loop)
 loop.run_until_complete(main())
 # Execução do loop principal asyncio
 # if __name__ == "__main__":
