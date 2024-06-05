@@ -74,7 +74,7 @@ def on_message(client, userdata, msg):
 #     await create_payment(payment)
 
 # Função para rodar o loop do MQTT
-async def mqtt_loop():
+async def mqtt_loop() -> Callable:
     client = mqtt.Client()
     client.on_connect = on_connect
     client.on_message = on_message
