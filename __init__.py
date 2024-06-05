@@ -51,30 +51,52 @@ broker = "172.21.240.91"
 port = 1883
 topic = "test/topic"
 
-async def on_connect(client, userdata, flags, rc):
+def on_connect(client, userdata, flags, rc):
     print("Conectado com código de resultado: " + str(rc))
-    client.subscribe("topico/teste")
+    client.subscribe(topic)
 
-async def on_message(client, userdata, msg):
-    print(f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}")
+def on_message(client, userdata, msg):
+    mensagem = msg.payload.decode()
+    print(f"Mensagem recebida: {mensagem} no tópico {msg.topic}")
+    # Colocar a mensagem na fila
+    userdata.put_nowait(mensagem)
 
-client = mqtt.Client()
-client.on_connect = on_connect
-client.on_message = on_message
+def on_log(client, userdata, level, buf):
+    print(f"Log: {buf}")
 
-client.connect(broker, 1883, 60)
-async def mqtt_loop():
-    client.loop_start()
+# Coroutine para processar a mensagem
+async def process_message(queue):
     while True:
-        await asyncio.sleep(1)
+        mensagem = await queue.get()
+        if mensagem is None:
+            break
+        # Exemplo de integração com os serviços do LNbits
+        await asyncio.sleep(2)
+# Função para rodar o loop do MQTT
+async def mqtt_loop(queue):
+    client = mqtt.Client(userdata=queue)
+    client.on_connect = on_connect
+    client.on_message = on_message
+    client.on_log = on_log  # Associa o callback de log
 
+    client.connect(broker, 1883, 60)
+    client.loop_start()
+
+    while True:
+        await asyncio.sleep(1)  # Manter o loop rodando
+
+# Função que retorna a coroutine mqtt_loop
+def start_mqtt_loop(queue):
+    return mqtt_loop(queue)
+
+# Função principal para inicializar as tarefas
 async def main():
-    await asyncio.gather(
-        mqtt_loop()
-    )
+    queue = asyncio.Queue()
+    create_permanent_task(lambda: start_mqtt_loop(queue))
+    asyncio.create_task(process_message(queue))  # Usar asyncio.create_task
 
-# Execute o loop de eventos asyncio
-asyncio.run(main())
+# Criar a tarefa principal
+create_permanent_task(main)
 # Execução do loop principal asyncio
 # if __name__ == "__main__":
 #     asyncio.run(main())
