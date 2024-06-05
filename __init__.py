@@ -9,8 +9,6 @@ from .tasks import wait_for_paid_invoices
 from .views import mysuperplugin_ext_generic
 from .views_api import mysuperplugin_ext_api
 import paho.mqtt.client as mqtt # type: ignore
-import threading
-import time
 
 async def print_message():
     while True:
@@ -22,8 +20,14 @@ async def main():
     # Iniciar a tarefa de impressão em um loop de eventos asyncio separado
     asyncio.create_task(print_message())
 
-# Iniciar o loop de eventos asyncio e executar a função principal
-asyncio.run(main())
+# Criar um novo loop de eventos asyncio
+loop = asyncio.new_event_loop()
+
+# Definir o loop de eventos asyncio como o loop atual
+asyncio.set_event_loop(loop)
+
+# Executar a função principal no loop de eventos asyncio
+loop.run_until_complete(main())
 
 
 db = Database("ext_mysuperplugin")
