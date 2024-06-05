@@ -51,6 +51,7 @@ broker = "172.21.240.91"
 port = 1883
 topic = "test/topic"
 
+# Configuração do Cliente MQTT
 def on_connect(client, userdata, flags, rc):
     print("Conectado com código de resultado: " + str(rc))
     client.subscribe(topic)
@@ -58,8 +59,10 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     mensagem = msg.payload.decode()
     print(f"Mensagem recebida: {mensagem} no tópico {msg.topic}")
-    # Colocar a mensagem na fila
-    userdata.put_nowait(mensagem)
+    # Usar run_coroutine_threadsafe para garantir que a coroutine seja executada no loop correto
+    loop = userdata['loop']
+    queue = userdata['queue']
+    asyncio.run_coroutine_threadsafe(queue.put(mensagem), loop)
 
 def on_log(client, userdata, level, buf):
     print(f"Log: {buf}")
@@ -71,10 +74,11 @@ async def process_message(queue):
         if mensagem is None:
             break
         # Exemplo de integração com os serviços do LNbits
-        await asyncio.sleep(2)
+        await asyncio.sleep(3)
+
 # Função para rodar o loop do MQTT
-async def mqtt_loop(queue):
-    client = mqtt.Client(userdata=queue)
+async def mqtt_loop(loop, queue):
+    client = mqtt.Client(userdata={'loop': loop, 'queue': queue})
     client.on_connect = on_connect
     client.on_message = on_message
     client.on_log = on_log  # Associa o callback de log
@@ -86,14 +90,15 @@ async def mqtt_loop(queue):
         await asyncio.sleep(1)  # Manter o loop rodando
 
 # Função que retorna a coroutine mqtt_loop
-def start_mqtt_loop(queue):
-    return mqtt_loop(queue)
+def start_mqtt_loop(loop, queue):
+    return mqtt_loop(loop, queue)
 
 # Função principal para inicializar as tarefas
 async def main():
+    loop = asyncio.get_event_loop()
     queue = asyncio.Queue()
-    create_permanent_task(lambda: start_mqtt_loop(queue))
-    asyncio.create_task(process_message(queue))  # Usar asyncio.create_task
+    create_permanent_task(lambda: start_mqtt_loop(loop, queue))
+    await process_message(queue)
 
 # Criar a tarefa principal
 create_permanent_task(main)
