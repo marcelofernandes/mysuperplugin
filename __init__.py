@@ -10,7 +10,7 @@ from .views import mysuperplugin_ext_generic
 from .views_api import mysuperplugin_ext_api
 import paho.mqtt.client as mqtt # type: ignore
 from lnbits.tasks import create_permanent_task # type: ignore
-from typing import Callable
+import threading
 
 db = Database("ext_mysuperplugin")
 
@@ -51,54 +51,25 @@ broker = "172.21.240.91"
 port = 1883
 topic = "test/topic"
 
-def on_subscribe(client, userdata, flags, rc):
-    print("Subscribed!")
-
 # Configuração do Cliente MQTT
 def on_connect(client, userdata, flags, rc):
     print("Conectado com código de resultado: " + str(rc))
     client.subscribe(topic)
 
 def on_message(client, userdata, msg):
-    mensagem = msg.payload.decode()
-    print(f"Mensagem recebida: {mensagem} no tópico {msg.topic}")
-    # Colocar a mensagem na fila
-    userdata.put_nowait(mensagem)
+    print(f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}")
 
-# Coroutine para processar a mensagem
-async def process_message(queue):
-    while True:
-        mensagem = await queue.get()
-        if mensagem is None:
-            break
-        # Exemplo de integração com os serviços do LNbits
-        await asyncio.sleep(10)
+client = mqtt.Client()
+client.on_connect = on_connect
+client.on_message = on_message
 
-# Função para rodar o loop do MQTT
-async def mqtt_loop(queue):
-    client = mqtt.Client(client_id="123121213",userdata=queue)
-    client.on_connect = on_connect
-    client.on_message = on_message
-    client.on_subscribe = on_subscribe
+client.connect(broker, 1883, 60)
 
-    client.connect(broker, port, 60)
-    client.loop_start()
+def mqtt_loop():
+    client.loop_forever()
 
-    while True:
-        await asyncio.sleep(1)  # Manter o loop rodando
-
-# Função que retorna a coroutine mqtt_loop
-def start_mqtt_loop(queue):
-    return mqtt_loop(queue)
-
-# Função principal para inicializar as tarefas
-async def main():
-    queue = asyncio.Queue()
-    create_permanent_task(lambda: start_mqtt_loop(queue))
-    await process_message(queue)
-
-# Criar a tarefa principal
-create_permanent_task(main)
+mqtt_thread = threading.Thread(target=mqtt_loop)
+mqtt_thread.start()
 
 # Execução do loop principal asyncio
 # if __name__ == "__main__":
