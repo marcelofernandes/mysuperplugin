@@ -57,7 +57,7 @@ def on_subscribe(client, userdata, flags, rc):
 # Configuração do Cliente MQTT
 def on_connect(client, userdata, flags, rc):
     print("Conectado com código de resultado: " + str(rc))
-    client.subscribe("topico/teste")
+    client.subscribe(topic)
 
 def on_message(client, userdata, msg):
     mensagem = msg.payload.decode()
