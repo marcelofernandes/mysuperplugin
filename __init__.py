@@ -59,10 +59,8 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     mensagem = msg.payload.decode()
     print(f"Mensagem recebida: {mensagem} no tópico {msg.topic}")
-    # Usar run_coroutine_threadsafe para garantir que a coroutine seja executada no loop correto
-    loop = userdata['loop']
-    queue = userdata['queue']
-    asyncio.run_coroutine_threadsafe(queue.put(mensagem), loop)
+    # Colocar a mensagem na fila
+    asyncio.run_coroutine_threadsafe(userdata.put(mensagem), userdata._loop)
 
 def on_log(client, userdata, level, buf):
     print(f"Log: {buf}")
@@ -76,9 +74,15 @@ async def process_message(queue):
         # Exemplo de integração com os serviços do LNbits
         await asyncio.sleep(3)
 
+# Função para rodar o loop do MQTT em uma thread separada
+def mqtt_thread(loop, queue):
+    asyncio.set_event_loop(loop)
+    loop.create_task(mqtt_loop(queue))
+    loop.run_forever()
+
 # Função para rodar o loop do MQTT
-async def mqtt_loop(loop, queue):
-    client = mqtt.Client(userdata={'loop': loop, 'queue': queue})
+async def mqtt_loop(queue):
+    client = mqtt.Client(userdata=queue)
     client.on_connect = on_connect
     client.on_message = on_message
     client.on_log = on_log  # Associa o callback de log
@@ -89,15 +93,14 @@ async def mqtt_loop(loop, queue):
     while True:
         await asyncio.sleep(1)  # Manter o loop rodando
 
-# Função que retorna a coroutine mqtt_loop
-def start_mqtt_loop(loop, queue):
-    return mqtt_loop(loop, queue)
-
 # Função principal para inicializar as tarefas
 async def main():
-    loop = asyncio.get_event_loop()
     queue = asyncio.Queue()
-    create_permanent_task(lambda: start_mqtt_loop(loop, queue))
+    loop = asyncio.new_event_loop()
+
+    # Iniciar uma nova thread com um novo loop de eventos
+    threading.Thread(target=mqtt_thread, args=(loop, queue), daemon=True).start()
+
     await process_message(queue)
 
 # Criar a tarefa principal
