@@ -30,13 +30,11 @@ port = 1883
 topic = "test/topic"
 
 def on_connect(client, userdata, flags, rc):
-    # logger.info("Conectado com código de resultado: " + str(rc))
-    print("Conectado com código de resultado: " + str(rc))
+    logger.info("Conectado com código de resultado: " + str(rc))
     client.subscribe(topic)
 
 def on_message(client, userdata, msg):
-    print(f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}")
-    # logger.info(f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}")
+    logger.info(f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}")
 
 async def example_task():
     client = mqtt.Client()
