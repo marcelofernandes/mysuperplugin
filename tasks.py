@@ -29,16 +29,14 @@ broker = "172.21.240.91"
 port = 1883
 topic = "test/topic"
 
-async def on_connect(client, userdata, flags, rc):
-    await asyncio.sleep(0.5)
+def on_connect(client, userdata, flags, rc):
+    logger.info("Conectado com código de resultado: " + str(rc))
     print("Connected")
-    # logger.info("Conectado com código de resultado: " + str(rc))
     client.subscribe(topic)
 
-async def on_message(client, userdata, msg):
-    await asyncio.sleep(0.5)
+def on_message(client, userdata, msg):
+    logger.info(f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}")
     print("Message rec")
-    # logger.info(f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}")
 
 async def example_task():
 
