@@ -46,14 +46,11 @@ def on_message(client, userdata, msg):
     except RuntimeError:
         logger.info("Without loop")
         loop = None
-
     if loop and loop.is_running():
         loop.run_until_complete(print_message(message))
-        logger.info("Task created")
     else:
         loop = asyncio.new_event_loop()
         loop.run_until_complete(print_message(message))
-        logger.info("Run coroutine threadsafe")
 
 async def example_task():
     client = mqtt.Client()
