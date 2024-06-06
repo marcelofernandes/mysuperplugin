@@ -38,17 +38,17 @@ topic = "test/topic"
 # # Executar a função principal
 # main()
 
-def initialize_server_websocket_logger() -> Callable:
-    async def update_websocket_serverlog():
-        while True:
-            print("Running")
-            await asyncio.sleep(2)
+# def initialize_server_websocket_logger() -> Callable:
+#     async def update_websocket_serverlog():
+#         while True:
+#             print("Running")
+#             await asyncio.sleep(2)
 
-    return update_websocket_serverlog
+#     return update_websocket_serverlog
 
-server_log_task = initialize_server_websocket_logger()
-create_permanent_task(server_log_task)
-print("Permanent Task created")
+# server_log_task = initialize_server_websocket_logger()
+# create_permanent_task(server_log_task)
+# print("Permanent Task created")
 
 db = Database("ext_mysuperplugin")
 
@@ -65,11 +65,11 @@ mysuperplugin_static_files = [
     }
 ]
 
-async def startup_event():
-    print("test")
+# async def startup_event():
+#     print("test")
 
-task2 = create_permanent_unique_task("ext_mqtt2", startup_event)  # type: ignore
-scheduled_tasks.append(task2)
+# task2 = create_permanent_unique_task("ext_mqtt2", startup_event)  # type: ignore
+# scheduled_tasks.append(task2)
 
 def mysuperplugin_stop():
     for task in scheduled_tasks:
