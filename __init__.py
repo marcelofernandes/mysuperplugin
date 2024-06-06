@@ -10,28 +10,74 @@ from .views import mysuperplugin_ext_generic
 from .views_api import mysuperplugin_ext_api
 import paho.mqtt.client as mqtt # type: ignore
 
-async def print_message():
-    while True:
-        print("Mensagem impressa a cada 3 segundos")
-        await asyncio.sleep(3)
+broker = "172.21.240.91"
+port = 1883
+topic = "test/topic"
 
-# Função principal para inicializar a tarefa de impressão
-async def main():
-    # Criar um novo loop de eventos asyncio
-    loop = asyncio.new_event_loop()
+# async def print_message():
+#     while True:
+#         print("Mensagem impressa a cada 3 segundos")
+#         await asyncio.sleep(3)
 
-    # Definir o loop de eventos asyncio como o loop atual
-    asyncio.set_event_loop(loop)
+# # Função principal para inicializar a tarefa de impressão
+# async def main():
+#     # Criar um novo loop de eventos asyncio
+#     loop = asyncio.new_event_loop()
 
-    # Iniciar a tarefa de impressão no loop de eventos asyncio
-    asyncio.create_task(print_message())
+#     # Definir o loop de eventos asyncio como o loop atual
+#     asyncio.set_event_loop(loop)
 
-    # Executar o loop de eventos asyncio indefinidamente
-    loop.run_forever()
+#     # Iniciar a tarefa de impressão no loop de eventos asyncio
+#     asyncio.create_task(print_message())
 
-# Executar a função principal
-main()
+#     # Executar o loop de eventos asyncio indefinidamente
+#     loop.run_forever()
 
+# # Executar a função principal
+# main()
+
+# Definição dos callbacks do MQTT
+def on_connect(client, userdata, flags, rc):
+    if rc == 0:
+        print("Conectado com sucesso ao broker MQTT")
+        client.subscribe(topic)
+        print("Falha na conexão, código de retorno:", rc)
+
+def on_message(client, userdata, msg):
+    print("Mensagem recebida no tópico:", msg.topic)
+    print("Payload:", msg.payload.decode())
+
+# Criação de um cliente MQTT
+client = mqtt.Client()
+
+# Configuração dos callbacks
+client.on_connect = on_connect
+client.on_message = on_message
+
+async def mqtt_loop():
+    client.connect(broker, port)
+    client.loop_start()  # Inicia o loop MQTT em segundo plano
+
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except asyncio.CancelledError:
+        client.loop_stop()
+        client.disconnect()
+
+async def start_mqtt_listener():
+    loop = asyncio.get_event_loop()
+    loop.create_task(mqtt_loop())
+
+def install():
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(start_mqtt_listener())
+
+def uninstall():
+    pass
+
+def migration():
+    pass
 
 db = Database("ext_mysuperplugin")
 
@@ -66,11 +112,6 @@ def mysuperplugin_start():
     # https://github.com/lnbits/lnbits/pull/2417
     task = create_permanent_unique_task("ext_testing", wait_for_paid_invoices)  # type: ignore
     scheduled_tasks.append(task)
-
-
-# broker = "172.21.240.91"
-# port = 1883
-# topic = "test/topic"
 
 # # Configuração do Cliente MQTT
 # def on_connect(client, userdata, flags, rc):
