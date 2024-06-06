@@ -35,45 +35,39 @@ def on_connect(client, userdata, flags, rc):
     print("Connected")
     client.subscribe(topic)
 
-# async def print_message(message):
-#     print(message)
-
-async def process_message(queue):
-    while True:
-        message = await queue.get()
-        print(message)  # Use print ou logger aqui
-        queue.task_done()
-
+async def print_message(message):
+    print(message)
 
 def on_message(client, userdata, msg):
 
     # logger.info(f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}")
     # teste = test_client()
     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
-    userdata['queue'].put_nowait(message)
-    # try:
-    #     loop = asyncio.get_running_loop()
-    #     logger.info("Has loop")
-    # except RuntimeError:  # Nenhum loop em execução
-    #     logger.info("Without loop")
-    #     loop = None
+    
+    try:
+        loop = asyncio.get_running_loop()
+        logger.info("Has loop")
+    except RuntimeError:  # Nenhum loop em execução
+        logger.info("Without loop")
+        loop = None
 
-    # if loop and loop.is_running():
-    #     asyncio.create_task(print_message(message))
-    #     logger.info("Task created")
-    # else:
-    #     loop = asyncio.new_event_loop()
-    #     logger.info("Run coroutine threadsafe")
-    #     loop.create_task(print_message(message))
-        # asyncio.run_coroutine_threadsafe(print_message(message), loop)
+    if loop and loop.is_running():
+        asyncio.create_task(print_message(message))
+        logger.info("Task created")
+    else:
+        loop = asyncio.new_event_loop()
+        loop.run_until_complete(print_message(message))
+        asyncio.set_event_loop(loop)
+        # loop = asyncio.new_event_loop()
+        # loop.run_until_complete(print_message(message))
+        asyncio.create_task(print_message(message))
+        logger.info("Run coroutine threadsafe")
 
     # asyncio.run_coroutine_threadsafe(print_message(message), loop)
     # logger.info(f"Teste message reveived: {teste}")
 
 async def example_task():
-    queue = asyncio.Queue()
-    asyncio.create_task(process_message(queue))
-    client = mqtt.Client(userdata={'queue': queue})
+    client = mqtt.Client()
     client.on_connect = on_connect
     client.on_message = on_message
     client.connect(broker, 1883, 60)
