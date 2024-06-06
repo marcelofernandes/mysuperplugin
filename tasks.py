@@ -36,6 +36,7 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe(topic)
 
 def on_message(client, userdata, msg):
+    
     logger.info(f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}")
     teste = test_client()
     print(f"Teste message reveived: {teste}")
