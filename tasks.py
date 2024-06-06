@@ -27,6 +27,6 @@ async def on_invoice_paid(payment: Payment) -> None:
 async def example_task():
     while True:
         # Lógica da tarefa que deve ser executada continuamente
-        # logger.info("Executando tarefa de exemplo...")
-        print("Testing print")
+        logger.info("Executando tarefa de exemplo...")
+        # print("Testing print")
         await asyncio.sleep(10)
