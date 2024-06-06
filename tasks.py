@@ -14,6 +14,7 @@ async def wait_for_paid_invoices():
     register_invoice_listener(invoice_queue, "mysuperplugin")
 
     while True:
+        print("Teste...")
         payment = await invoice_queue.get()
         await on_invoice_paid(payment)
 
