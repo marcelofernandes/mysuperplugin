@@ -34,14 +34,15 @@ def on_connect(client, userdata, flags, rc):
     logger.info("Conectado com código de resultado: " + str(rc))
     print("Connected")
     client.subscribe(topic)
+
 async def print_message(message):
     print(message)
 
-def on_message(client, userdata, msg):
+async def on_message(client, userdata, msg):
     # logger.info(f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}")
     # teste = test_client()
     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
-    asyncio.run_coroutine_threadsafe(print_message(message), asyncio.get_event_loop())
+    await asyncio.run_coroutine_threadsafe(print_message(message), asyncio.get_event_loop())
     # logger.info(f"Teste message reveived: {teste}")
 
 async def example_task():
