@@ -8,7 +8,7 @@ from lnbits.core.models import Payment
 from lnbits.tasks import register_invoice_listener
 from loguru import logger
 import paho.mqtt.client as mqtt # type: ignore
-# from .mqtt_client import test_client
+from .mqtt_client import test_client
 
 
 async def wait_for_paid_invoices():
@@ -37,7 +37,7 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
     logger.info(f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}")
-    # teste = test_client()
+    teste = test_client()
     # logger.info(f"Teste message reveived: {teste}")
 
 async def example_task():
