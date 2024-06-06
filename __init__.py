@@ -9,6 +9,8 @@ from .tasks import wait_for_paid_invoices
 from .views import mysuperplugin_ext_generic
 from .views_api import mysuperplugin_ext_api
 import paho.mqtt.client as mqtt # type: ignore
+from typing import Callable
+from lnbits.tasks import create_permanent_task # type: ignore
 
 broker = "172.21.240.91"
 port = 1883
@@ -36,48 +38,17 @@ topic = "test/topic"
 # # Executar a função principal
 # main()
 
-# Definição dos callbacks do MQTT
-def on_connect(client, userdata, flags, rc):
-    if rc == 0:
-        print("Conectado com sucesso ao broker MQTT")
-        client.subscribe(topic)
-        print("Falha na conexão, código de retorno:", rc)
-
-def on_message(client, userdata, msg):
-    print("Mensagem recebida no tópico:", msg.topic)
-    print("Payload:", msg.payload.decode())
-
-# Criação de um cliente MQTT
-client = mqtt.Client()
-
-# Configuração dos callbacks
-client.on_connect = on_connect
-client.on_message = on_message
-
-async def mqtt_loop():
-    client.connect(broker, port)
-    client.loop_start()  # Inicia o loop MQTT em segundo plano
-
-    try:
+def initialize_server_websocket_logger() -> Callable:
+    async def update_websocket_serverlog():
         while True:
-            await asyncio.sleep(1)
-    except asyncio.CancelledError:
-        client.loop_stop()
-        client.disconnect()
+            print("Running")
+            await asyncio.sleep(2)
 
-async def start_mqtt_listener():
-    loop = asyncio.get_event_loop()
-    loop.create_task(mqtt_loop())
+    return update_websocket_serverlog
 
-def install():
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(start_mqtt_listener())
-
-def uninstall():
-    pass
-
-def migration():
-    pass
+server_log_task = initialize_server_websocket_logger()
+create_permanent_task(server_log_task)
+print("Permanent Task created")
 
 db = Database("ext_mysuperplugin")
 
