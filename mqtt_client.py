@@ -5,6 +5,9 @@ broker_address = '172.21.240.91'
 port = 1883
 topic = 'test/topic'
 
+def test_client():
+    return "Ok"
+
 async def connect_and_subscribe(client):
     await client.subscribe(topic)
     print(f'Subscrito no tópico {topic}')
