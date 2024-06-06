@@ -37,7 +37,7 @@ def on_connect(client, userdata, flags, rc):
 
 
 async def print_message(message):
-    print("Print new 2: " + message)
+    print("Print new 3: " + message)
 
 def on_message(client, userdata, msg):
     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
