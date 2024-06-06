@@ -54,10 +54,11 @@ def print_message(message):
     time.sleep(1)
     print("Print new 5: " + message)
 
-async def on_message():
+async def on_message(client, userdata, msg):
+    message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
     loop = asyncio.get_event_loop()
     with ThreadPoolExecutor() as pool:
-        await loop.run_in_executor(pool, print_message)
+        await loop.run_in_executor(pool, print_message(message))
         print("Terminated")
 
 async def example_task():
