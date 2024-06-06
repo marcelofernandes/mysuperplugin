@@ -34,32 +34,32 @@ def on_connect(client, userdata, flags, rc):
     logger.info("Conectado com código de resultado: " + str(rc))
     client.subscribe(topic)
 
-# async def print_message(message):
-#     print("Print new 5: " + message)
-
-# def on_message(client, userdata, msg):
-#     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
-#     try:
-#         loop = asyncio.get_running_loop()
-#     except RuntimeError:
-#         loop = None
-#     if loop and loop.is_running():
-#         loop.run_until_complete(print_message(message))
-#     else:
-#         loop = asyncio.new_event_loop()
-#         loop.run_until_complete(print_message(message))
-#         logger.info("Run coroutine threadsafe")
-
-def print_message(message):
-    time.sleep(1)
+async def print_message(message):
     print("Print new 5: " + message)
 
-async def on_message(client, userdata, msg):
+def on_message(client, userdata, msg):
     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
-    loop = asyncio.get_event_loop()
-    with ThreadPoolExecutor() as pool:
-        await loop.run_in_executor(pool, print_message(message))
-        print("Terminated")
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = None
+    if loop and loop.is_running():
+        loop.run_until_complete(print_message(message))
+    else:
+        loop = asyncio.new_event_loop()
+        loop.run_until_complete(print_message(message))
+        logger.info("Run coroutine threadsafe")
+
+# def print_message(message):
+#     time.sleep(1)
+#     print("Print new 5: " + message)
+
+# async def on_message(client, userdata, msg):
+#     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
+#     loop = asyncio.get_event_loop()
+#     with ThreadPoolExecutor() as pool:
+#         await loop.run_in_executor(pool, print_message(message))
+#         print("Terminated")
 
 async def example_task():
     client = mqtt.Client()
