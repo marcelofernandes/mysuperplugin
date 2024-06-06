@@ -41,6 +41,7 @@ def on_message(client, userdata, msg):
 async def example_task():
     invoice_queue = asyncio.Queue()
     register_invoice_listener(invoice_queue, "testing")
+    
     client = mqtt.Client()
     client.on_connect = on_connect
     client.on_message = on_message
