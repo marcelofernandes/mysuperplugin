@@ -29,4 +29,4 @@ async def example_task():
         # Lógica da tarefa que deve ser executada continuamente
         # logger.info("Executando tarefa de exemplo...")
         print("Executando tarefa de exemplo...")
-        await asyncio.sleep(10)
+        await asyncio.sleep(5)
