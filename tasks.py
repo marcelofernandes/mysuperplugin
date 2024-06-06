@@ -38,22 +38,19 @@ def on_connect(client, userdata, flags, rc):
 async def print_message(message):
     print("Printing: " + message)
 
-def on_message(client, userdata, msg):
-    message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
+def get_loop():
     try:
         loop = asyncio.get_running_loop()
-        logger.info("Has loop")
     except RuntimeError:
-        logger.info("Without loop")
         loop = None
-
-    if loop and loop.is_running():
-        loop.run_until_complete(print_message(message))
-        logger.info("Task created")
-    else:
+    if loop == None or not(loop.is_running()):
         loop = asyncio.new_event_loop()
-        loop.run_until_complete(print_message(message))
-        logger.info("Run coroutine threadsafe")
+    return loop
+
+def on_message(client, userdata, msg):
+    message = f"Nova mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
+    loop = get_loop()
+    loop.run_until_complete(print_message(message))
 
 async def example_task():
     client = mqtt.Client()
