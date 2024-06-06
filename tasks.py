@@ -36,7 +36,7 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe(topic)
 
 async def print_message(message):
-    print(message)
+    print("Print " + message)
 
 def on_message(client, userdata, msg):
 
@@ -65,15 +65,15 @@ async def example_task():
     client.on_message = on_message
     client.connect(broker, 1883, 60)
     client.loop_start()
-    try:
-        loop = asyncio.get_running_loop()
-        logger.info("Has loop")
-    except RuntimeError:  # Nenhum loop em execução
-        logger.info("Without loop")
-        loop = None
+    # try:
+    #     loop = asyncio.get_running_loop()
+    #     logger.info("Has loop")
+    # except RuntimeError:  # Nenhum loop em execução
+    #     logger.info("Without loop")
+    #     loop = None
 
-    if loop and loop.is_running():
-        logger.info("Run forever 1")
-    else:
-        loop = asyncio.new_event_loop()
-        logger.info("Run forever 2")
+    # if loop and loop.is_running():
+    #     logger.info("Run forever 1")
+    # else:
+    #     loop = asyncio.new_event_loop()
+    #     logger.info("Run forever 2")
