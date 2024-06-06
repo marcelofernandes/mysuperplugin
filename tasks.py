@@ -35,29 +35,21 @@ def on_connect(client, userdata, flags, rc):
     print("Connected")
     client.subscribe(topic)
 
+
 async def print_message(message):
-    print("Print " + message)
+    print("Print new: " + message)
 
 def on_message(client, userdata, msg):
-
-    # logger.info(f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}")
-    # teste = test_client()
     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
-    # asyncio.create_task(print_message(message))
     try:
         loop = asyncio.get_running_loop()
-        logger.info("Has loop")
-    except RuntimeError:  # Nenhum loop em execução
-        logger.info("Without loop")
+    except RuntimeError:
         loop = None
-
     if loop and loop.is_running():
         loop.run_until_complete(print_message(message))
-        logger.info("Task created")
     else:
         loop = asyncio.new_event_loop()
         loop.run_until_complete(print_message(message))
-        logger.info("Run coroutine threadsafe")
 
 async def example_task():
     client = mqtt.Client()
@@ -65,15 +57,3 @@ async def example_task():
     client.on_message = on_message
     client.connect(broker, 1883, 60)
     client.loop_start()
-    # try:
-    #     loop = asyncio.get_running_loop()
-    #     logger.info("Has loop")
-    # except RuntimeError:  # Nenhum loop em execução
-    #     logger.info("Without loop")
-    #     loop = None
-
-    # if loop and loop.is_running():
-    #     logger.info("Run forever 1")
-    # else:
-    #     loop = asyncio.new_event_loop()
-    #     logger.info("Run forever 2")
