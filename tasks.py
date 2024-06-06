@@ -56,7 +56,7 @@ def on_message(client, userdata, msg):
         logger.info("Task created")
     else:
         loop = asyncio.new_event_loop()
-        loop.run_until_complete(print_message(message))
+        # loop.run_until_complete(print_message(message))
         asyncio.set_event_loop(loop)
         # loop = asyncio.new_event_loop()
         # loop.run_until_complete(print_message(message))
