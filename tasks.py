@@ -23,3 +23,9 @@ async def on_invoice_paid(payment: Payment) -> None:
         payment.extra.get("tag") == "mysuperplugin"
     ):  # Will grab any payment with the tag "mysuperplugin"
         logger.debug(payment)
+
+async def example_task():
+    while True:
+        # Lógica da tarefa que deve ser executada continuamente
+        logger.info("Executando tarefa de exemplo...")
+        await asyncio.sleep(10)

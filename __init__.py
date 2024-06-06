@@ -5,7 +5,7 @@ from lnbits.db import Database # type: ignore
 from lnbits.tasks import create_permanent_unique_task # type: ignore
 from loguru import logger # type: ignore
 
-from .tasks import wait_for_paid_invoices
+from .tasks import wait_for_paid_invoices, example_task
 from .views import mysuperplugin_ext_generic
 from .views_api import mysuperplugin_ext_api
 import paho.mqtt.client as mqtt # type: ignore
@@ -83,11 +83,7 @@ def mysuperplugin_start():
     # https://github.com/lnbits/lnbits/pull/2417
     task = create_permanent_unique_task("ext_testing", wait_for_paid_invoices)  # type: ignore
     scheduled_tasks.append(task)
-    async def mytask():
-        while True:
-            print("Testing")
-            await asyncio.sleep(3)
-    task3 = create_permanent_unique_task("ext_mytask", mytask)
+    task3 = create_permanent_unique_task("ext_mytask3", example_task)
     scheduled_tasks.append(task3)
 
 # # Configuração do Cliente MQTT
