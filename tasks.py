@@ -44,7 +44,7 @@ def on_message(client, userdata, msg):
     try:
         loop = asyncio.get_running_loop()
     except RuntimeError:
-        logger.info("Without loop")
+        # logger.info("Without loop")
         loop = None
     if loop and loop.is_running():
         loop.run_until_complete(print_message(message))
