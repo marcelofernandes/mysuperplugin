@@ -55,8 +55,9 @@ def on_message(client, userdata, msg):
         asyncio.create_task(print_message(message))
         logger.info("Task created")
     else:
+        loop = asyncio.new_event_loop()
         logger.info("Run coroutine threadsafe")
-        asyncio.run_coroutine_threadsafe(print_message(message))
+        loop.run_until_complete(print_message(message))
 
     # asyncio.run_coroutine_threadsafe(print_message(message), loop)
     # logger.info(f"Teste message reveived: {teste}")
