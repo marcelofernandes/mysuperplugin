@@ -35,7 +35,8 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe(topic)
 
 def on_message(client, userdata, msg):
-    logger.info(f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}")
+    print(f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}")
+    # logger.info(f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}")
 
 async def example_task():
     client = mqtt.Client()
