@@ -30,13 +30,17 @@ port = 1883
 topic = "test/topic"
 
 def on_connect(client, userdata, flags, rc):
-    logger.info("Conectado com código de resultado: " + str(rc))
+    print("Connected")
+    # logger.info("Conectado com código de resultado: " + str(rc))
     client.subscribe(topic)
 
 def on_message(client, userdata, msg):
-    logger.info(f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}")
+    print("Message rec")
+    # logger.info(f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}")
 
 async def example_task():
+    invoice_queue = asyncio.Queue()
+    register_invoice_listener(invoice_queue, "testing")
     client = mqtt.Client()
     client.on_connect = on_connect
     client.on_message = on_message
