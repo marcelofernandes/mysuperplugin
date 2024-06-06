@@ -15,8 +15,7 @@ async def wait_for_paid_invoices():
 
     while True:
         print("Teste...")
-        payment = await invoice_queue.get()
-        await on_invoice_paid(payment)
+        await asyncio.sleep(2)
 
 
 async def on_invoice_paid(payment: Payment) -> None:
