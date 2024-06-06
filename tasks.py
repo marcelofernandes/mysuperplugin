@@ -37,13 +37,12 @@ def on_connect(client, userdata, flags, rc):
 
 
 async def print_message(message):
-    print("Print new: " + message)
+    print("Print new 2: " + message)
 
 def on_message(client, userdata, msg):
     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
     try:
         loop = asyncio.get_running_loop()
-        logger.info("Has loop")
     except RuntimeError:
         logger.info("Without loop")
         loop = None
