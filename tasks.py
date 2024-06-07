@@ -83,9 +83,12 @@ def on_message(client, userdata, msg):
     except RuntimeError:
         loop = None
     if loop and loop.is_running():
+        logger.info("if statement")
         task = loop.create_task(pmessage(message))
         scheduled_tasks.append(task)
     else:
+        logger.info("else statement")
+        loop = asyncio.new_event_loop()
         loop.run_until_complete(pmessage(message))
 
 async def example_task():
