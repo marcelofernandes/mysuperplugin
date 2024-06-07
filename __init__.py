@@ -85,7 +85,8 @@ def mysuperplugin_start():
     task = create_permanent_unique_task("ext_testing", wait_for_paid_invoices)  # type: ignore
     scheduled_tasks.append(task)
     loop = asyncio.get_event_loop()
-    loop.create_task(catch_everything_and_restart(example_task))
+    task2 = loop.create_task(catch_everything_and_restart(example_task))
+    scheduled_tasks.append(task2)
     # task3 = create_permanent_unique_task("ext_mytask3", example_task)
     # scheduled_tasks.append(task3)
 
