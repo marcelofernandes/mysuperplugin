@@ -85,6 +85,7 @@ def on_message(client, userdata, msg):
 
         # Wait for the result with an optional timeout argument
         assert future.result() == 3
+        logger.info("Assert true and loop running")
     else:
         loop = asyncio.new_event_loop()
         coro = asyncio.sleep(1, result=3)
