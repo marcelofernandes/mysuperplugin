@@ -71,19 +71,22 @@ async def print_message(message):
     asyncio.sleep(1)
     print("Print new 8: " + message)
 
+scheduled_tasks: list[asyncio.Task] = []
+
 def on_message(client, userdata, msg):
     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
+    async def pmessage(messa):
+        asyncio.sleep(1)
+        print(messa)
     try:
         loop = asyncio.get_running_loop()
     except RuntimeError:
         loop = None
     if loop and loop.is_running():
-        print(loop)
-        logger.info("Loop running")
+        task = loop.create_task(pmessage(message))
+        scheduled_tasks.append(task)
     else:
-        loop = asyncio.new_event_loop()
-        print(loop)
-        logger.info("Loop not running")
+        loop.run_until_complete(pmessage(message))
 
 async def example_task():
     print(asyncio.get_event_loop())
