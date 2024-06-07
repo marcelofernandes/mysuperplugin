@@ -78,24 +78,10 @@ def on_message(client, userdata, msg):
     except RuntimeError:
         loop = None
     if loop and loop.is_running():
-        coro = asyncio.sleep(1, result=3)
-
-        # Submit the coroutine to a given loop
-        future = asyncio.run_coroutine_threadsafe(coro, loop)
-
-        # Wait for the result with an optional timeout argument
-        assert future.result() == 3
-        logger.info("Assert true and loop running")
+        logger.info("Loop running")
     else:
         loop = asyncio.new_event_loop()
-        coro = asyncio.sleep(1, result=3)
-
-        # Submit the coroutine to a given loop
-        future = asyncio.run_coroutine_threadsafe(coro, loop)
-
-        # Wait for the result with an optional timeout argument
-        assert future.result() == 3
-        logger.info("Assert true")
+        logger.info("Loop not running")
     
     # with ThreadPoolExecutor() as pool:
     #     await loop.run_in_executor(pool, print_message(message))
