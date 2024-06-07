@@ -68,7 +68,8 @@ def on_connect(client, userdata, flags, rc):
 #         loop.run_until_complete(print_message(message, loop))
 
 async def print_message(message):
-    print("Print new 5: " + message)
+    asyncio.sleep(1)
+    print("Print new 8: " + message)
 
 def on_message(client, userdata, msg):
     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
