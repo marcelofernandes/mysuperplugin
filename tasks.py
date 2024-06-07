@@ -34,8 +34,11 @@ def on_connect(client, userdata, flags, rc):
     logger.info("Conectado com código de resultado: " + str(rc))
     client.subscribe(topic)
 
-async def print_message(message):
-    print("Print new 7: " + message)
+async def print_message(message, loop):
+    async def pmessage(messag):
+        print("Print new 8: " + messag)
+    task = loop.create_task(pmessage(message))
+    await task
 
 # def on_message(client, userdata, msg):
 #     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
@@ -57,11 +60,12 @@ def on_message(client, userdata, msg):
     except RuntimeError:
         loop = None
     if loop and loop.is_running():
-        loop.run_until_complete(print_message(message))
+        loop.run_until_complete(print_message(message, loop))
+        # print_message(message, loop)
     else:
         logger.info("Run coroutine threadsafe")
         loop = asyncio.new_event_loop()
-        ret = loop.run_until_complete(print_message(message))
+        loop.run_until_complete(print_message(message, loop))
 
 # def print_message(message):
 #     time.sleep(1)
