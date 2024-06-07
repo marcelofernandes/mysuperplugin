@@ -35,8 +35,7 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe(topic)
 
 async def print_message(message):
-    # print("Print new 5: " + message)
-    return "Print new 6: " + message
+    print("Print new 7: " + message)
 
 # def on_message(client, userdata, msg):
 #     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
@@ -63,7 +62,6 @@ def on_message(client, userdata, msg):
         logger.info("Run coroutine threadsafe")
         loop = asyncio.new_event_loop()
         ret = loop.run_until_complete(print_message(message))
-        print(ret)
 
 # def print_message(message):
 #     time.sleep(1)
@@ -77,6 +75,7 @@ def on_message(client, userdata, msg):
 #         print("Terminated")
 
 async def example_task():
+    print(asyncio.get_event_loop())
     client = mqtt.Client()
     client.on_connect = on_connect
     client.on_message = on_message

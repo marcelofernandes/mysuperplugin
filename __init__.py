@@ -11,6 +11,7 @@ from .views_api import mysuperplugin_ext_api
 import paho.mqtt.client as mqtt # type: ignore
 from typing import Callable
 from lnbits.tasks import create_permanent_task # type: ignore
+from lnbits.tasks import catch_everything_and_restart # type: ignore
 
 broker = "172.21.240.91"
 port = 1883
@@ -83,8 +84,10 @@ def mysuperplugin_start():
     # https://github.com/lnbits/lnbits/pull/2417
     task = create_permanent_unique_task("ext_testing", wait_for_paid_invoices)  # type: ignore
     scheduled_tasks.append(task)
-    task3 = create_permanent_unique_task("ext_mytask3", example_task)
-    scheduled_tasks.append(task3)
+    loop = asyncio.get_event_loop()
+    loop.create_task(catch_everything_and_restart(example_task))
+    # task3 = create_permanent_unique_task("ext_mytask3", example_task)
+    # scheduled_tasks.append(task3)
 
 # # Configuração do Cliente MQTT
 # def on_connect(client, userdata, flags, rc):
