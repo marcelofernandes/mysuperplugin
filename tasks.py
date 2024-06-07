@@ -35,7 +35,8 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe(topic)
 
 async def print_message(message):
-    print("Print new 5: " + message)
+    # print("Print new 5: " + message)
+    return "Print new 6: " + message
 
 # def on_message(client, userdata, msg):
 #     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
@@ -50,7 +51,7 @@ async def print_message(message):
 #         loop.run_until_complete(print_message(message))
 #         logger.info("Run coroutine threadsafe")
 
-async def on_message(client, userdata, msg):
+def on_message(client, userdata, msg):
     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
     try:
         loop = asyncio.get_running_loop()
@@ -60,8 +61,8 @@ async def on_message(client, userdata, msg):
         loop.run_until_complete(print_message(message))
     else:
         loop = asyncio.new_event_loop()
-        task = loop.create_task(print_message(message))
-        await task
+        ret = loop.run_until_complete(print_message(message))
+        print(ret)
 
 # def print_message(message):
 #     time.sleep(1)
