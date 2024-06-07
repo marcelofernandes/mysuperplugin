@@ -60,6 +60,7 @@ def on_message(client, userdata, msg):
     if loop and loop.is_running():
         loop.run_until_complete(print_message(message))
     else:
+        logger.info("Run coroutine threadsafe")
         loop = asyncio.new_event_loop()
         ret = loop.run_until_complete(print_message(message))
         print(ret)
