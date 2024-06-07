@@ -71,8 +71,6 @@ async def print_message(message):
     asyncio.sleep(1)
     print("Print new 8: " + message)
 
-scheduled_tasks: list[asyncio.Task] = []
-
 def on_message(client, userdata, msg):
     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
     async def pmessage(messa):
@@ -84,12 +82,12 @@ def on_message(client, userdata, msg):
         loop = None
     if loop and loop.is_running():
         logger.info("if statement")
-        task = loop.create_task(pmessage(message))
-        scheduled_tasks.append(task)
+        asyncio.run(pmessage(message))
     else:
         logger.info("else statement")
         loop = asyncio.new_event_loop()
-        loop.run_until_complete(pmessage(message))
+        asyncio.set_event_loop(loop)
+        asyncio.run(pmessage(message))
 
 async def example_task():
     client = mqtt.Client()
