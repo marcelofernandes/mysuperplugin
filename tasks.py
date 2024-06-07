@@ -71,7 +71,7 @@ def print_message(message):
     time.sleep(1)
     print("Print new 5: " + message)
 
-async def on_message(client, userdata, msg):
+def on_message(client, userdata, msg):
     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
     print("Terminated" + message)
     # with ThreadPoolExecutor() as pool:
