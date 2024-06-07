@@ -75,7 +75,7 @@ async def print_message(message):
 def on_message(client, userdata, msg):
     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
     async def pmessage(messa):
-        asyncio.sleep(1)
+        await asyncio.sleep(1)
         logger.info(messa)
     try:
         loop = asyncio.get_running_loop()
