@@ -76,7 +76,7 @@ def on_message(client, userdata, msg):
     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
     async def pmessage(messa):
         await asyncio.sleep(0)
-        logger.info(messa)
+        print(messa)
     try:
         loop = asyncio.get_running_loop()
     except RuntimeError:
