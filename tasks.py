@@ -71,6 +71,7 @@ async def print_message(message):
     asyncio.sleep(1)
     print("Print new 8: " + message)
 
+
 def on_message(client, userdata, msg):
     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
     async def pmessage(messa):
