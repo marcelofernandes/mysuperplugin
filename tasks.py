@@ -73,7 +73,16 @@ async def print_message(message):
 
 def on_message(client, userdata, msg):
     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
-    asyncio.run_coroutine_threadsafe(print_message(message), asyncio.get_event_loop())
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = None
+    if loop and loop.is_running():
+        asyncio.run_coroutine_threadsafe(print_message(message), loop)
+    else:
+        loop = asyncio.new_event_loop()
+        asyncio.run_coroutine_threadsafe(print_message(message), loop)
+    
     # with ThreadPoolExecutor() as pool:
     #     await loop.run_in_executor(pool, print_message(message))
     #     print("Terminated")
