@@ -78,14 +78,12 @@ def on_message(client, userdata, msg):
     except RuntimeError:
         loop = None
     if loop and loop.is_running():
+        print(loop)
         logger.info("Loop running")
     else:
         loop = asyncio.new_event_loop()
+        print(loop)
         logger.info("Loop not running")
-    
-    # with ThreadPoolExecutor() as pool:
-    #     await loop.run_in_executor(pool, print_message(message))
-    #     print("Terminated")
 
 async def example_task():
     print(asyncio.get_event_loop())
@@ -94,3 +92,4 @@ async def example_task():
     client.on_message = on_message
     client.connect(broker, 1883, 60)
     client.loop_start()
+    print(asyncio.get_event_loop())
