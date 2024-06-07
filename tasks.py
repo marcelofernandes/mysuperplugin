@@ -94,3 +94,5 @@ async def example_task():
     client.on_message = on_message
     client.connect(broker, 1883, 60)
     client.loop_start()
+    while True:
+        asyncio.sleep(10)
