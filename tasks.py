@@ -77,7 +77,7 @@ def on_message(client, userdata, msg):
     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
     async def pmessage(messa):
         asyncio.sleep(1)
-        print(messa)
+        logger.info(messa)
     try:
         loop = asyncio.get_running_loop()
     except RuntimeError:
@@ -92,10 +92,8 @@ def on_message(client, userdata, msg):
         loop.run_until_complete(pmessage(message))
 
 async def example_task():
-    print(asyncio.get_event_loop())
     client = mqtt.Client()
     client.on_connect = on_connect
     client.on_message = on_message
     client.connect(broker, 1883, 60)
     client.loop_start()
-    print(asyncio.get_event_loop())
