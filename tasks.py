@@ -73,13 +73,9 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, msg):
-    logger.info(asyncio.get_event_loop())
-    logger.info("Loop running: ", asyncio.get_event_loop().is_running())
-    logger.info("Loop running: ", asyncio.get_event_loop().is_closed())
     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
-    logger.info(message)
-    # async def pmessage(messa):
-    #     logger.info(messa)
+    async def pmessage(messa):
+        logger.info(messa)
     # try:
     #     loop = asyncio.get_running_loop()
     #     logger.info("has first loop")
@@ -95,20 +91,10 @@ def on_message(client, userdata, msg):
     #     asyncio.set_event_loop(loop)
     #     asyncio.run(pmessage(message))
 
-    # try:
-    #     loop = asyncio.get_running_loop()
-    #     logger.info("has first loop")
-    # except RuntimeError:
-    #     logger.info("loop runtime error")
-    #     loop = None
-    # if loop and loop.is_running():
-    #     logger.info("if statement")
-    #     asyncio.run(pmessage(message))
-    # else:
-    #     logger.info("else statement")
-    #     loop = asyncio.loop
-    #     asyncio.set_event_loop(loop)
-    #     asyncio.run(pmessage(message))
+    logger.info("else statement")
+    loop = asyncio.new_event_loop()
+    loop.create_task(pmessage(message))
+        
     
 
 async def example_task():
