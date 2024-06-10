@@ -4,7 +4,7 @@ from fastapi import APIRouter # type: ignore
 from lnbits.db import Database # type: ignore
 from lnbits.tasks import create_permanent_unique_task # type: ignore
 from loguru import logger
-from mqtt_client import MQTTClient # type: ignore
+from .mqtt_client import MQTTClient # type: ignore
 
 from .tasks import wait_for_paid_invoices, example_task
 from .views import mysuperplugin_ext_generic
