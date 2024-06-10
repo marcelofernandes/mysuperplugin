@@ -93,7 +93,7 @@ def on_message(client, userdata, msg):
 
     logger.info("else statement")
     loop = asyncio.new_event_loop()
-    loop.create_task(pmessage(message))
+    loop.run_until_complete(pmessage(message))
         
     
 
