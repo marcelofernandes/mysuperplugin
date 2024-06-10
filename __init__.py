@@ -6,7 +6,7 @@ from lnbits.tasks import create_permanent_unique_task # type: ignore
 from loguru import logger
 from .mqtt_client import MQTTClient # type: ignore
 
-from .tasks import wait_for_paid_invoices, example_task
+from .tasks import wait_for_paid_invoices
 from .views import mysuperplugin_ext_generic
 from .views_api import mysuperplugin_ext_api
 import paho.mqtt.client as mqtt # type: ignore
