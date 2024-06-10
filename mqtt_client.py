@@ -24,7 +24,8 @@ class MQTTClient:
 
             def on_message(client, userdata, msg):
                 message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
-                logger.info(message)
+                # logger.info(message)
+                print("Printing: ", message)
 
             return on_connect, on_message
 
