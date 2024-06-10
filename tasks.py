@@ -3,13 +3,11 @@
 # add your dependencies here
 
 import asyncio
-import time
 from lnbits.core.models import Payment
 from lnbits.tasks import register_invoice_listener
 from loguru import logger
 import paho.mqtt.client as mqtt # type: ignore
 from .mqtt_client import test_client
-from concurrent.futures import ThreadPoolExecutor
 
 async def wait_for_paid_invoices():
     invoice_queue = asyncio.Queue()
@@ -73,31 +71,19 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, msg):
+    print("Print at on_message")
     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
     async def pmessage(messa):
         logger.info(messa)
-    # try:
-    #     loop = asyncio.get_running_loop()
-    #     logger.info("has first loop")
-    # except RuntimeError:
-    #     logger.info("loop runtime error")
-    #     loop = None
-    # if loop and loop.is_running():
-    #     logger.info("if statement")
-    #     asyncio.run(pmessage(message))
-    # else:
-    #     logger.info("else statement")
-    #     loop = asyncio.new_event_loop()
-    #     asyncio.set_event_loop(loop)
-    #     asyncio.run(pmessage(message))
-
-    logger.info("else statement")
+        resp = test_client()
+        logger.info(resp)
     loop = asyncio.new_event_loop()
     loop.run_until_complete(pmessage(message))
         
     
 
 async def example_task():
+    await asyncio.sleep(15)
     client = mqtt.Client()
     client.on_connect = on_connect
     client.on_message = on_message
