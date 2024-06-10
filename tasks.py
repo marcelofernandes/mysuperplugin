@@ -72,13 +72,13 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
     print("Print at on_message")
-    message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
-    async def pmessage(messa):
-        logger.info(messa)
-        resp = test_client()
-        logger.info(resp)
-    loop = asyncio.new_event_loop()
-    loop.run_until_complete(pmessage(message))
+    # message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
+    # async def pmessage(messa):
+    #     logger.info(messa)
+    #     resp = test_client()
+    #     logger.info(resp)
+    # loop = asyncio.new_event_loop()
+    # loop.run_until_complete(pmessage(message))
         
     
 
