@@ -75,11 +75,12 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
     async def pmessage(messa):
-        await asyncio.sleep(0)
         logger.info(messa)
     try:
         loop = asyncio.get_running_loop()
+        logger.info("has first loop")
     except RuntimeError:
+        logger.info("loop runtime error")
         loop = None
     if loop and loop.is_running():
         logger.info("if statement")
