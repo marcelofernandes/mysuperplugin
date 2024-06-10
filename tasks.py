@@ -28,9 +28,9 @@ broker = "172.21.240.91"
 port = 1883
 topic = "test/topic"
 
-def on_connect(client, userdata, flags, rc):
-    logger.info("Conectado com código de resultado: " + str(rc))
-    client.subscribe(topic)
+# def on_connect(client, userdata, flags, rc):
+#     logger.info("Conectado com código de resultado: " + str(rc))
+#     client.subscribe(topic)
 
 # async def print_message(message, loop):
 #     async def pmessage(messag):
@@ -70,22 +70,22 @@ def on_connect(client, userdata, flags, rc):
 #     print("Print new 8: " + message)
 
 
-def on_message(client, userdata, msg):
-    message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
-    async def pmessage(messa):
-        print("Print at on_message", messa)
-        # logger.info(messa)
-        # resp = test_client()
-        # logger.info(resp)
-    loop = asyncio.new_event_loop()
-    loop.run_until_complete(pmessage(message))
+# def on_message(client, userdata, msg):
+#     message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
+#     async def pmessage(messa):
+#         print("Print at on_message", messa)
+#         # logger.info(messa)
+#         # resp = test_client()
+#         # logger.info(resp)
+#     loop = asyncio.new_event_loop()
+#     loop.run_until_complete(pmessage(message))
         
     
 
-async def example_task():
-    await asyncio.sleep(15)
-    client = mqtt.Client()
-    client.on_connect = on_connect
-    client.on_message = on_message
-    client.connect(broker, 1883, 60)
-    client.loop_start()
+# async def example_task():
+#     await asyncio.sleep(15)
+#     client = mqtt.Client()
+#     client.on_connect = on_connect
+#     client.on_message = on_message
+#     client.connect(broker, 1883, 60)
+#     client.loop_start()

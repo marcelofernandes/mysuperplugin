@@ -3,7 +3,8 @@ import asyncio
 from fastapi import APIRouter # type: ignore
 from lnbits.db import Database # type: ignore
 from lnbits.tasks import create_permanent_unique_task # type: ignore
-from loguru import logger # type: ignore
+from loguru import logger
+from mqtt_client import MQTTClient # type: ignore
 
 from .tasks import wait_for_paid_invoices, example_task
 from .views import mysuperplugin_ext_generic
@@ -16,6 +17,8 @@ from lnbits.tasks import catch_everything_and_restart # type: ignore
 broker = "172.21.240.91"
 port = 1883
 topic = "test/topic"
+
+mqtt_client: MQTTClient = MQTTClient()
 
 # async def print_message():
 #     while True:
@@ -80,15 +83,20 @@ def mysuperplugin_stop():
             logger.warning(ex)
 
 def mysuperplugin_start():
+    async def _subscribe_to_mqtt_client():
+        await asyncio.sleep(10)
+        await mqtt_client.connect_to_mqtt_broker()
+    
     # ignore will be removed in lnbits `0.12.6`
     # https://github.com/lnbits/lnbits/pull/2417
     task = create_permanent_unique_task("ext_testing", wait_for_paid_invoices)  # type: ignore
     scheduled_tasks.append(task)
     loop = asyncio.get_event_loop()
-    task2 = loop.create_task(catch_everything_and_restart(example_task))
-    scheduled_tasks.append(task2)
-    # task3 = create_permanent_unique_task("ext_mytask3", example_task)
-    # scheduled_tasks.append(task3)
+    # task2 = loop.create_task(catch_everything_and_restart(example_task))
+    # scheduled_tasks.append(task2)
+    task3 = create_permanent_unique_task("ext_mytask3", _subscribe_to_mqtt_client)
+    scheduled_tasks.append(task3)
+    
 
 # # Configuração do Cliente MQTT
 # def on_connect(client, userdata, flags, rc):
