@@ -32,9 +32,6 @@ class MQTTClient:
         self.client.on_connect = on_connect
         self.client.on_message = on_message
         self.client.connect(self.broker, self.port, 60)
-        # wst = Thread(target=self.client.loop_start)
-        # wst.daemon = True
-        # wst.start()
     
     def start_mqtt_client(self):
         wst = Thread(target=self.client.loop_start)
