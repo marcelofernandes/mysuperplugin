@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 from loguru import logger
 from threading import Thread
+from .crud import (create, update, get_device, delete_device) 
 
 class MQTTClient:
     def __init__(self):
@@ -14,9 +15,10 @@ class MQTTClient:
                 logger.info("Conectado com código de resultado: " + str(rc))
                 client.subscribe(self.topic)
 
-            def on_message(client, userdata, msg):
+            async def on_message(client, userdata, msg):
                 message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
                 logger.info(message)
+                await create("device-01")
 
             return on_connect, on_message
 
