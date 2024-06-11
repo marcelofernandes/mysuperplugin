@@ -89,3 +89,10 @@ topic = "test/topic"
 #     client.on_message = on_message
 #     client.connect(broker, 1883, 60)
 #     client.loop_start()
+
+# enviar mensagem do device para o broker
+# enviar mensagem para o cliente de pagamentos
+# salvar mensagem com id do pagamento
+# fazer o pagamento
+# mandar mensagem para o device
+# imprimir mensagem de device liberado
