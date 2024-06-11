@@ -1,9 +1,11 @@
 from . import db
+from loguru import logger
 
 async def create(device_id: str) -> None:
+    logger.info(device_id)
     await db.execute(
         """
-        INSERT INTO mysuperplugin.payment (device_id, time)
+        INSERT INTO mysuperplugin.payment (payment_id, time)
         VALUES (?, ?)
         """,
         (device_id, db.timestamp_now),
