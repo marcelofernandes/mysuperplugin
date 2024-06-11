@@ -5,12 +5,13 @@ from .crud import (create, update, get_device, delete_device)
 import asyncio
 
 class MQTTClient:
-    def __init__(self):
+    async def __init__(self):
         self.broker = "172.21.240.91"
         self.port = 1883
         self.topic = "topic/payment"
         self.client = None
-        create("device")
+        await create("device")
+        logger.info("Passed created")
 
     def _ws_handlers(self):
             def on_connect(client, userdata, flags, rc):
