@@ -5,12 +5,20 @@ from .crud import (create, update, get_device, delete_device)
 import asyncio
 
 class MQTTClient:
-    async def __init__(self):
+    def __init__(self):
         self.broker = "172.21.240.91"
         self.port = 1883
         self.topic = "topic/payment"
         self.client = None
-        await create("device")
+        try:
+            loop = asyncio.get_running_loop()
+        except RuntimeError:
+            loop = None
+        if loop and loop.is_running():
+            asyncio.run_coroutine_threadsafe(create("device"), loop)
+        else:
+            loop = asyncio.new_event_loop()
+            asyncio.run_coroutine_threadsafe(create("device"), loop)
         logger.info("Passed created")
 
     def _ws_handlers(self):
