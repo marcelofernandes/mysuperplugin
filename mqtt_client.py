@@ -8,7 +8,8 @@ class MQTTClient:
     def __init__(self):
         self.broker = "172.21.240.91"
         self.port = 1883
-        self.topic = "topic/payment"
+        self.topic_payment = "topic/payment"
+        self.topic_device = "topic/device"
         self.client = None
         # try:
         #     loop = asyncio.get_running_loop()
@@ -23,26 +24,18 @@ class MQTTClient:
     def _ws_handlers(self):
             def on_connect(client, userdata, flags, rc):
                 logger.info("Conectado com código de resultado: " + str(rc))
-                client.subscribe(self.topic)
+                client.subscribe(self.topic_payment)
 
             async def test(msg, loop):
                 await asyncio.run_coroutine_threadsafe(handle_message(msg), loop)
 
             async def handle_message(msg):
-                await create(msg.payload.decode())
-                
+                msg_decoded = msg.payload.decode() 
+                await create(msg_decoded)
+                self.client.publish(self.topic_device, f"Device {msg_decoded} liberado")
 
             def on_message(client, userdata, msg):
                 message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
-                # try:
-                #     loop = asyncio.get_running_loop()
-                # except RuntimeError:
-                #     loop = None
-                # if loop and loop.is_running():
-                #     asyncio.run_coroutine_threadsafe(create(msg.payload.decode()), loop)
-                # else:
-                #     loop = asyncio.new_event_loop()
-                #     asyncio.run_coroutine_threadsafe(create(msg.payload.decode()), loop)
                 asyncio.run(handle_message(msg))
                 logger.info(message)
 
