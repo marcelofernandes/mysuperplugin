@@ -1,7 +1,8 @@
 import paho.mqtt.client as mqtt
 from loguru import logger
 from threading import Thread
-from .crud import (create, update, get_device, delete_device) 
+from .crud import (create, update, get_device, delete_device)
+import asyncio
 
 class MQTTClient:
     def __init__(self):
@@ -15,10 +16,27 @@ class MQTTClient:
                 logger.info("Conectado com código de resultado: " + str(rc))
                 client.subscribe(self.topic)
 
-            async def on_message(client, userdata, msg):
-                await create("device-01")
-                message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
-                logger.info(message)
+
+            async def handle_message(msg):
+                print(f"Mensagem recebida no tópico {msg.topic}: {msg.payload.decode()}")
+                # Simula uma operação assíncrona
+                await asyncio.sleep(1)
+                print("Operação assíncrona completa")
+
+            def on_message(client, userdata, msg):
+                # async def insert():
+                #     await create("device-01")
+                try:
+                    loop = asyncio.get_running_loop()
+                except RuntimeError:
+                    loop = None
+                if loop and loop.is_running():
+                    asyncio.run_coroutine_threadsafe(handle_message(msg), loop)
+                else:
+                    loop = asyncio.new_event_loop()
+                    asyncio.run_coroutine_threadsafe(handle_message(msg), loop)
+                # message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
+                # logger.info(message)
 
             return on_connect, on_message
 
