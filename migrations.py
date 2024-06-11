@@ -3,8 +3,8 @@
 async def m001_initial(db):
    await db.execute(
        f"""
-       CREATE TABLE mysuperplugin.payment (
-           payment_id TEXT
+       CREATE TABLE mysuperplugin.device (
+           device_id TEXT
        );
    """
    )

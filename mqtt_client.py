@@ -29,10 +29,8 @@ class MQTTClient:
                 await asyncio.run_coroutine_threadsafe(handle_message(msg), loop)
 
             async def handle_message(msg):
-                logger.info(f"Mensagem recebida no tópico {msg.topic}: {msg.payload.decode()}")
-                # Simula uma operação assíncrona
-                await asyncio.sleep(1)
-                logger.info("Operação assíncrona completa")
+                await create(msg.payload.decode())
+                
 
             def on_message(client, userdata, msg):
                 message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
@@ -45,7 +43,7 @@ class MQTTClient:
                 # else:
                 #     loop = asyncio.new_event_loop()
                 #     asyncio.run_coroutine_threadsafe(create(msg.payload.decode()), loop)
-                asyncio.run(create(msg.payload.decode()))
+                asyncio.run(handle_message(msg))
                 logger.info(message)
 
             return on_connect, on_message
