@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 from loguru import logger
 from threading import Thread
+import asyncio
 
 broker_address = '172.21.240.91'
 port = 1883
@@ -31,13 +32,13 @@ class MQTTClient:
     async def connect_to_mqtt_broker(self):
         logger.debug(f"Connecting to MQTT broker")
         on_connect, on_message = self._ws_handlers()
-
+        await asyncio.sleep(5)
         self.client = mqtt.Client()
         self.client.on_connect = on_connect
         self.client.on_message = on_message
         self.client.connect(self.broker, self.port, 60)
     
-    async def start_mqtt_client(self):
+    def start_mqtt_client(self):
         wst = Thread(target=self.client.loop_start)
         wst.daemon = True
         wst.start()
