@@ -1,6 +1,4 @@
-# import json
-# from typing import List, Optional
-from .__init__ import db
+from . import db
 
 async def create(device_id: str) -> None:
     await db.execute(
