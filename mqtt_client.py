@@ -25,10 +25,9 @@ class MQTTClient:
 
             return on_connect, on_message
 
-    async def connect_to_mqtt_broker(self):
+    def connect_to_mqtt_broker(self):
         logger.debug(f"Connecting to MQTT broker")
         on_connect, on_message = self._ws_handlers()
-        await asyncio.sleep(5)
         self.client = mqtt.Client()
         self.client.on_connect = on_connect
         self.client.on_message = on_message

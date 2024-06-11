@@ -40,7 +40,7 @@ def mysuperplugin_stop():
 def mysuperplugin_start():
     async def _start_mqtt_client():
         await asyncio.sleep(5)
-        await mqtt_client.connect_to_mqtt_broker()
+        mqtt_client.connect_to_mqtt_broker()
         # await asyncio.sleep(10)
         # mqtt_client.start_mqtt_client()
     
