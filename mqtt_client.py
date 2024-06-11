@@ -16,12 +16,14 @@ class MQTTClient:
                 logger.info("Conectado com código de resultado: " + str(rc))
                 client.subscribe(self.topic)
 
+            async def test(msg, loop):
+                await asyncio.run_coroutine_threadsafe(handle_message(msg), loop)
 
             async def handle_message(msg):
-                print(f"Mensagem recebida no tópico {msg.topic}: {msg.payload.decode()}")
+                logger.info(f"Mensagem recebida no tópico {msg.topic}: {msg.payload.decode()}")
                 # Simula uma operação assíncrona
                 await asyncio.sleep(1)
-                print("Operação assíncrona completa")
+                logger.info("Operação assíncrona completa")
 
             def on_message(client, userdata, msg):
                 # async def insert():
@@ -31,10 +33,10 @@ class MQTTClient:
                 except RuntimeError:
                     loop = None
                 if loop and loop.is_running():
-                    asyncio.run_coroutine_threadsafe(handle_message(msg), loop)
+                    test(msg, loop)
                 else:
                     loop = asyncio.new_event_loop()
-                    asyncio.run_coroutine_threadsafe(handle_message(msg), loop)
+                    test(msg, loop)
                 # message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
                 # logger.info(message)
 
