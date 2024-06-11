@@ -36,16 +36,16 @@ class MQTTClient:
 
             def on_message(client, userdata, msg):
                 message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
-                try:
-                    loop = asyncio.get_running_loop()
-                except RuntimeError:
-                    loop = None
-                if loop and loop.is_running():
-                    asyncio.run_coroutine_threadsafe(create(msg.payload.decode()), loop)
-                else:
-                    loop = asyncio.new_event_loop()
-                    asyncio.run_coroutine_threadsafe(create(msg.payload.decode()), loop)
-                
+                # try:
+                #     loop = asyncio.get_running_loop()
+                # except RuntimeError:
+                #     loop = None
+                # if loop and loop.is_running():
+                #     asyncio.run_coroutine_threadsafe(create(msg.payload.decode()), loop)
+                # else:
+                #     loop = asyncio.new_event_loop()
+                #     asyncio.run_coroutine_threadsafe(create(msg.payload.decode()), loop)
+                asyncio.run(create(msg.payload.decode()))
                 logger.info(message)
 
             return on_connect, on_message
