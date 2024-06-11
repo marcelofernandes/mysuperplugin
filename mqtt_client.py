@@ -10,6 +10,7 @@ class MQTTClient:
         self.port = 1883
         self.topic = "topic/payment"
         self.client = None
+        create("device")
 
     def _ws_handlers(self):
             def on_connect(client, userdata, flags, rc):
@@ -28,17 +29,17 @@ class MQTTClient:
             def on_message(client, userdata, msg):
                 # async def insert():
                 #     await create("device-01")
-                try:
-                    loop = asyncio.get_running_loop()
-                except RuntimeError:
-                    loop = None
-                if loop and loop.is_running():
-                    test(msg, loop)
-                else:
-                    loop = asyncio.new_event_loop()
-                    test(msg, loop)
-                # message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
-                # logger.info(message)
+                # try:
+                #     loop = asyncio.get_running_loop()
+                # except RuntimeError:
+                #     loop = None
+                # if loop and loop.is_running():
+                #     test(msg, loop)
+                # else:
+                #     loop = asyncio.new_event_loop()
+                #     test(msg, loop)
+                message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
+                logger.info(message)
 
             return on_connect, on_message
 
