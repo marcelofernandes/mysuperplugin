@@ -2,12 +2,8 @@ import paho.mqtt.client as mqtt
 from loguru import logger
 from threading import Thread
 
-def test_client():
-    return "Ok"
-
 class MQTTClient:
     def __init__(self):
-        self.running = False
         self.broker = "172.21.240.91"
         self.port = 1883
         self.topic = "topic/payment"
