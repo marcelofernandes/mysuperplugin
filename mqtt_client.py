@@ -4,7 +4,7 @@ from threading import Thread
 
 broker_address = '172.21.240.91'
 port = 1883
-topic = 'test/topic'
+topic = 'topic/payment'
 
 def test_client():
     return "Ok"
@@ -42,8 +42,8 @@ class MQTTClient:
         wst.daemon = True
         wst.start()
 
-    def disconnect_to_mqtt_broker(self):
-        logger.debug(f"Disconnecting to MQTT broker")
-        self.client.loop_stop()
-        self.client.disconnect()
-        logger.debug(f"Disconnected to MQTT broker")
+    # def disconnect_to_mqtt_broker(self):
+    #     logger.debug(f"Disconnecting to MQTT broker")
+    #     self.client.loop_stop()
+    #     self.client.disconnect()
+    #     logger.debug(f"Disconnected to MQTT broker")

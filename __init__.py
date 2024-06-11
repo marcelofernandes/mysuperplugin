@@ -33,7 +33,7 @@ def mysuperplugin_stop():
     for task in scheduled_tasks:
         try:
             task.cancel()
-            mqtt_client.disconnect_to_mqtt_broker()
+            # mqtt_client.disconnect_to_mqtt_broker()
         except Exception as ex:
             logger.warning(ex)
 
