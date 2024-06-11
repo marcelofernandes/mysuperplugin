@@ -37,14 +37,17 @@ class MQTTClient:
         self.client.on_connect = on_connect
         self.client.on_message = on_message
         self.client.connect(self.broker, self.port, 60)
-    
-    def start_mqtt_client(self):
         wst = Thread(target=self.client.loop_start)
         wst.daemon = True
         wst.start()
+    
+    # def start_mqtt_client(self):
+    #     wst = Thread(target=self.client.loop_start)
+    #     wst.daemon = True
+    #     wst.start()
 
-    def disconnect_to_mqtt_broker(self):
-        logger.debug(f"Disconnecting to MQTT broker")
-        self.client.loop_stop()
-        self.client.disconnect()
-        logger.debug(f"Disconnected to MQTT broker")
+    # def disconnect_to_mqtt_broker(self):
+    #     logger.debug(f"Disconnecting to MQTT broker")
+    #     self.client.loop_stop()
+    #     self.client.disconnect()
+    #     logger.debug(f"Disconnected to MQTT broker")
