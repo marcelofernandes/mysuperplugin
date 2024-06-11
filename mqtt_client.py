@@ -3,10 +3,6 @@ from loguru import logger
 from threading import Thread
 import asyncio
 
-broker_address = '172.21.240.91'
-port = 1883
-topic = 'topic/payment'
-
 def test_client():
     return "Ok"
 
@@ -15,7 +11,7 @@ class MQTTClient:
         self.running = False
         self.broker = "172.21.240.91"
         self.port = 1883
-        self.topic = "test/topic"
+        self.topic = "topic/payment"
         self.client = None
 
     def _ws_handlers(self):
