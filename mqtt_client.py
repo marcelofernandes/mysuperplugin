@@ -10,16 +10,16 @@ class MQTTClient:
         self.port = 1883
         self.topic = "topic/payment"
         self.client = None
-        try:
-            loop = asyncio.get_running_loop()
-        except RuntimeError:
-            loop = None
-        if loop and loop.is_running():
-            asyncio.run_coroutine_threadsafe(create("payment_01"), loop)
-        else:
-            loop = asyncio.new_event_loop()
-            asyncio.run_coroutine_threadsafe(create("payment_01"), loop)
-        logger.info("Passed created")
+        # try:
+        #     loop = asyncio.get_running_loop()
+        # except RuntimeError:
+        #     loop = None
+        # if loop and loop.is_running():
+        #     asyncio.run_coroutine_threadsafe(create("payment_01"), loop)
+        # else:
+        #     loop = asyncio.new_event_loop()
+        #     asyncio.run_coroutine_threadsafe(create("payment_01"), loop)
+        # logger.info("Passed created")
 
     def _ws_handlers(self):
             def on_connect(client, userdata, flags, rc):
