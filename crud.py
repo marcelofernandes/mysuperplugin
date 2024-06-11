@@ -1,9 +1,7 @@
 # import json
 # from typing import List, Optional
 from lnbits.db import Database
-# from . import db
-
-db = Database("ext_mysuperplugin")
+from .__init__ import db
 
 async def create(device_id: str) -> None:
     await db.execute(
