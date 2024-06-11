@@ -1,14 +1,14 @@
 from . import db
 from loguru import logger
 
-async def create(device_id: str) -> None:
-    logger.info(device_id)
+async def create(payment_id: str) -> None:
+    logger.info(payment_id)
     await db.execute(
         """
-        INSERT INTO mysuperplugin.payment (payment_id, time)
-        VALUES (?, ?)
+        INSERT INTO mysuperplugin.payment (payment_id)
+        VALUES (?)
         """,
-        (device_id, db.timestamp_now),
+        (payment_id),
     )
     return
 

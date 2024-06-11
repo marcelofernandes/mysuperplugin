@@ -15,10 +15,10 @@ class MQTTClient:
         except RuntimeError:
             loop = None
         if loop and loop.is_running():
-            asyncio.run_coroutine_threadsafe(create("device"), loop)
+            asyncio.run_coroutine_threadsafe(create("payment_01"), loop)
         else:
             loop = asyncio.new_event_loop()
-            asyncio.run_coroutine_threadsafe(create("device"), loop)
+            asyncio.run_coroutine_threadsafe(create("payment_01"), loop)
         logger.info("Passed created")
 
     def _ws_handlers(self):
