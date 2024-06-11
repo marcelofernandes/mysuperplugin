@@ -1,7 +1,7 @@
 import asyncio
 
 from fastapi import APIRouter
-from lnbits.db import Database
+# from lnbits.db import Database
 from lnbits.tasks import create_permanent_unique_task
 from loguru import logger
 
@@ -10,7 +10,7 @@ from .views import mysuperplugin_ext_generic
 from .views_api import mysuperplugin_ext_api
 
 mqtt_client: MQTTClient = MQTTClient()
-db = Database("ext_mysuperplugin")
+# db = Database("ext_mysuperplugin")
 scheduled_tasks: list[asyncio.Task] = []
 
 mysuperplugin_ext: APIRouter = APIRouter(prefix="/mysuperplugin", tags=["mysuperplugin"])
