@@ -16,9 +16,9 @@ class MQTTClient:
                 client.subscribe(self.topic)
 
             async def on_message(client, userdata, msg):
+                await create("device-01")
                 message = f"Mensagem recebida: {msg.payload.decode()} no tópico {msg.topic}"
                 logger.info(message)
-                await create("device-01")
 
             return on_connect, on_message
 
