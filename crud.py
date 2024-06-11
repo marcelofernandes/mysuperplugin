@@ -2,7 +2,6 @@ from . import db
 from loguru import logger
 
 async def create(payment_id: str) -> None:
-    logger.info(payment_id)
     await db.execute(
         """
         INSERT INTO mysuperplugin.payment (payment_id)
