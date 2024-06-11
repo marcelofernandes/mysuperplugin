@@ -41,8 +41,6 @@ class MQTTClient:
         wst.daemon = True
         wst.start()
 
-    # def disconnect_to_mqtt_broker(self):
-    #     logger.debug(f"Disconnecting to MQTT broker")
-    #     self.client.loop_stop()
-    #     self.client.disconnect()
-    #     logger.debug(f"Disconnected to MQTT broker")
+    def disconnect_to_mqtt_broker(self):
+        self.client.loop_stop()
+        self.client.disconnect()
