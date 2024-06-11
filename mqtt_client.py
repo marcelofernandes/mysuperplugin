@@ -1,7 +1,6 @@
 import paho.mqtt.client as mqtt
 from loguru import logger
 from threading import Thread
-import asyncio
 
 def test_client():
     return "Ok"
