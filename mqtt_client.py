@@ -19,7 +19,6 @@ class MQTTClient:
         # else:
         #     loop = asyncio.new_event_loop()
         #     asyncio.run_coroutine_threadsafe(create("payment_01"), loop)
-        logger.info("Passed created")
 
     def _ws_handlers(self):
             def on_connect(client, userdata, flags, rc):

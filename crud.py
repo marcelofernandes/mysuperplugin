@@ -2,6 +2,7 @@ from . import db
 from loguru import logger
 
 async def create(payment_id: str) -> None:
+    logger.info("Before create")
     await db.execute(
         """
         INSERT INTO mysuperplugin.payment (payment_id)
@@ -9,6 +10,7 @@ async def create(payment_id: str) -> None:
         """,
         (payment_id),
     )
+    logger.info("After create")
     return
 
 
